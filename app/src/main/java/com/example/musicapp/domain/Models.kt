@@ -1,13 +1,11 @@
 package com.example.musicapp.domain
 
-import java.util.Date
-
 data class Album(
     val id: Long,
     val name: String,
     val imageUrl: String,
     val artistName: String,
-    val releaseDate: Date,
+    val releaseDate: String,
     val genres: List<Genre>
 )
 

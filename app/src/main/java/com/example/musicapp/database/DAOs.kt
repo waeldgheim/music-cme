@@ -1,7 +1,6 @@
 package com.example.musicapp.database
 
 import androidx.room.Dao
-import androidx.room.Insert
 import androidx.room.Query
 
 @Dao
@@ -15,8 +14,8 @@ interface AlbumDao {
 
 @Dao
 interface GenreDao {
-    @Query("SELECT * FROM genres WHERE id = :id")
-    suspend fun getGenreById(id: Long): DatabaseGenre?
+    @Query("SELECT * FROM genres WHERE id IN (:genreIds)")
+    fun getGenresByIds(genreIds: List<Long>): List<DatabaseGenre>
 
     // MightRemoveLater
     @Query("SELECT * FROM genres")
@@ -25,8 +24,8 @@ interface GenreDao {
 
 @Dao
 interface AlbumGenreJoinDao {
-    @Query("SELECT * FROM album_genre_join WHERE albumId = :albumId")
-    suspend fun getGenresForAlbum(albumId: Long): List<AlbumGenreJoin>
+    @Query("SELECT genreId FROM album_genre_join WHERE albumId = :albumId")
+    fun getGenreIdsByAlbumId(albumId: Long): List<Long>
 
 
 }
