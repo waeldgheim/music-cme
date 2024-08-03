@@ -15,7 +15,7 @@ data class DatabaseAlbum(
 )
 
 @Entity(tableName = "genres")
-data class Genre(
+data class DatabaseGenre(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val name: String,
     val url: String
@@ -26,7 +26,7 @@ data class Genre(
     primaryKeys = ["albumId", "genreId"],
     foreignKeys = [
         ForeignKey(entity = DatabaseAlbum::class, parentColumns = ["id"], childColumns = ["albumId"]),
-        ForeignKey(entity = Genre::class, parentColumns = ["id"], childColumns = ["genreId"])
+        ForeignKey(entity = DatabaseGenre::class, parentColumns = ["id"], childColumns = ["genreId"])
     ]
 )
 data class AlbumGenreJoin(
