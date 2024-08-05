@@ -19,16 +19,7 @@ import androidx.navigation.NavController
 fun ScreenAContent(navController: NavController) {
 
     val viewModel = hiltViewModel<ScreenAViewModel>()
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Text(
-            text = viewModel.test,
-            style = TextStyle(fontSize = 27.sp),
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-        )
-    }
+
     LazyColumn {
         items(10) { index ->
             Button(
