@@ -1,6 +1,7 @@
 [versions]
 agp = "8.5.1"
 converterMoshi = "2.9.0"
+githubGlide = "4.16.0"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -17,6 +18,7 @@ navigationCompose = "2.7.7"
 retrofit = "2.9.0"
 
 [libraries]
+glide-v4120 = { module = "com.github.bumptech.glide:glide", version.ref = "githubGlide" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 com-squareup-moshi-moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
