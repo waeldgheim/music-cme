@@ -5,26 +5,20 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [DatabaseAlbum::class, DatabaseGenre::class, AlbumGenreJoin::class], version = 1)
+@Database(entities = [DatabaseAlbum::class], version = 1)
 abstract class MusicDatabase : RoomDatabase() {
-    abstract fun albumDao(): AlbumDao
-    abstract fun albumGenreJoinDao(): AlbumGenreJoinDao
-    abstract fun genreDao(): GenreDao
+    abstract val albumDao: AlbumDao
+}
 
-    companion object {
-        @Volatile
-        private var INSTANCE: MusicDatabase? = null
+private lateinit var INSTANCE: MusicDatabase
 
-        fun getDatabase(context: Context): MusicDatabase {
-            return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    MusicDatabase::class.java,
-                    "music_database"
-                ).build()
-                INSTANCE = instance
-                instance
-            }
+fun getDatabase(context:Context):MusicDatabase{
+    synchronized(MusicDatabase::class.java){
+        if (!::INSTANCE.isInitialized) {
+            INSTANCE = Room.databaseBuilder(context.applicationContext,
+                MusicDatabase::class.java,
+                "albumsDatbase").build()
         }
     }
+    return INSTANCE
 }
