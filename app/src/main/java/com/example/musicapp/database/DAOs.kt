@@ -4,14 +4,15 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.StateFlow
 
 @Dao
 interface AlbumDao {
     @Query("SELECT * FROM albums WHERE id = :id")
-    suspend fun getAlbumById(id: Long): DatabaseAlbum?
+    fun getAlbumById(id: Long): DatabaseAlbum?
 
     @Query("SELECT * FROM albums")
-    suspend fun getAllAlbums(): List<DatabaseAlbum>
+    fun getAllAlbums(): StateFlow<List<DatabaseAlbum>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg albums: DatabaseAlbum)
