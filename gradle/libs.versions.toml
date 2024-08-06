@@ -16,8 +16,12 @@ hiltNavigationCompose = "1.2.0"
 moshi = "1.15.1"
 navigationCompose = "2.7.7"
 retrofit = "2.9.0"
+roomRuntime = "2.6.1"
 
 [libraries]
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 glide-v4120 = { module = "com.github.bumptech.glide:glide", version.ref = "githubGlide" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }

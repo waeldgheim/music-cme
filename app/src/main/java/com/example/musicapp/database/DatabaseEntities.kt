@@ -6,29 +6,12 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "albums")
 data class DatabaseAlbum(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    @PrimaryKey val id: Long = 0,
     val name: String,
-    val imageUrl: String,
     val artistName: String,
+    val genre: String,
+    val imageUrl: String,
     val releaseDate: String,
-)
-
-@Entity(tableName = "genres")
-data class DatabaseGenre(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val name: String,
-    val url: String
-)
-
-@Entity(
-    tableName = "album_genre_join",
-    primaryKeys = ["albumId", "genreId"],
-    foreignKeys = [
-        ForeignKey(entity = DatabaseAlbum::class, parentColumns = ["id"], childColumns = ["albumId"]),
-        ForeignKey(entity = DatabaseGenre::class, parentColumns = ["id"], childColumns = ["genreId"])
-    ]
-)
-data class AlbumGenreJoin(
-    val albumId: Long,
-    val genreId: Long
+    val copyright: String,
+    val albumUrl: String
 )
