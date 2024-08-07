@@ -14,11 +14,18 @@ class MusicRepository @Inject constructor(
     private val musicAppService: MusicAppService) {
 
     val albums: Flow<List<DatabaseAlbum>> = database.albumDao.getAllAlbums()
+    lateinit var albumDetails: DatabaseAlbum
 
     suspend fun refreshAlbums(){
         withContext(Dispatchers.IO){
             val allAlbums = musicAppService.getTopHundred()
             database.albumDao.insertAll(*allAlbums.asDatabaseModel())
+        }
+    }
+
+    suspend fun getAlbumById (id: String){
+        withContext(Dispatchers.IO){
+            albumDetails = database.albumDao.getAlbumById(id)!!
         }
     }
 
