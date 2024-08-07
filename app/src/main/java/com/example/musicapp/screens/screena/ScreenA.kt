@@ -1,7 +1,6 @@
 package com.example.musicapp.screens.screena
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -30,7 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.example.musicapp.network.NetworkAlbum
+import com.example.musicapp.database.DatabaseAlbum
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -38,7 +37,7 @@ import kotlinx.coroutines.withContext
 @Composable
 fun ScreenAContent(navController: NavController) {
 val viewModel: ScreenAViewModel = hiltViewModel()
-val albumList by viewModel.album.collectAsState()
+val albumList by viewModel.albums.collectAsState(initial = emptyList())
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(16.dp),
@@ -51,7 +50,7 @@ val albumList by viewModel.album.collectAsState()
 }
 
 @Composable
-fun AlbumItem(album: NetworkAlbum) {
+fun AlbumItem(album: DatabaseAlbum) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
