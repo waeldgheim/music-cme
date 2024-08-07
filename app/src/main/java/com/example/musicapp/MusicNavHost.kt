@@ -20,9 +20,9 @@ fun MusicNavHost(
         composable(ButtonList.route) {
             ScreenAContent(navController)
         }
-        composable("${Detail.route}/{buttonId}") { backStackEntry ->
-            val buttonId = backStackEntry.arguments?.getString("buttonId")
-            ScreenBContent(buttonId)
+        composable("${Detail.route}/{albumId}") { backStackEntry ->
+            val albumId = backStackEntry.arguments?.getString("albumId")
+            ScreenBContent(albumId)
         }
     }
 }
