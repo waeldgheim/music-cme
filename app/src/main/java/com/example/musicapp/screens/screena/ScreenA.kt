@@ -1,6 +1,7 @@
 package com.example.musicapp.screens.screena
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -29,6 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.musicapp.Detail
 import com.example.musicapp.database.DatabaseAlbum
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -44,17 +46,20 @@ val albumList by viewModel.albums.collectAsState(initial = emptyList())
         modifier = Modifier.fillMaxSize()
     ) {
         items(albumList) { album ->
-            AlbumItem(album = album)
+            AlbumItem(album = album, navController)
         }
     }
 }
 
 @Composable
-fun AlbumItem(album: DatabaseAlbum) {
+fun AlbumItem(album: DatabaseAlbum, navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
+            .clickable {
+                navController.navigate("${Detail.route}/${album.id}")
+            }
     ) {
         album.imageUrl?.let {
             GlideImage(
