@@ -33,7 +33,7 @@ fun NetworkAlbumResponse.asDatabaseModel(): Array<DatabaseAlbum>{
             id = it.id,
             name = it.name,
             artistName = it.artistName,
-            genre = it.genres.toString(),
+            genre = it.genres.joinToString(separator = ", ") { it.name },
             imageUrl = it.imageUrl,
             releaseDate = it.releaseDate,
             copyright = feed.copyright,
