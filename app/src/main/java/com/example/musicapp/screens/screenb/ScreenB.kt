@@ -5,10 +5,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.musicapp.screens.screenb.ScreenBViewModel
 
 @Composable
-fun ScreenBContent(buttonId: String?) {
+fun ScreenBContent(albumId: String?) {
     val viewModel = hiltViewModel<ScreenBViewModel>()
-    Text(
-        text = "Button ID: $buttonId",
-        modifier = Modifier
-    )
+
 }
