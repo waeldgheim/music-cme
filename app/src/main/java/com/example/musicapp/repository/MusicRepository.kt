@@ -5,8 +5,8 @@ import com.example.musicapp.database.MusicDatabase
 import com.example.musicapp.network.MusicAppService
 import com.example.musicapp.network.asDatabaseModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.flow.Flow
+
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -14,7 +14,7 @@ class MusicRepository @Inject constructor(
     private val database: MusicDatabase,
     private val musicAppService: MusicAppService) {
 
-    val albums: StateFlow<List<DatabaseAlbum>> = database.albumDao.getAllAlbums()
+    val albums: Flow<List<DatabaseAlbum>> = database.albumDao.getAllAlbums()
 
     suspend fun refreshAlbums(){
         withContext(Dispatchers.IO){
@@ -24,4 +24,3 @@ class MusicRepository @Inject constructor(
     }
 
 }
-
