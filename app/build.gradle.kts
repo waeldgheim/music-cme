@@ -80,7 +80,5 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
-    // Realm dependency
-    implementation(libs.library.base)
+    implementation(libs.library.base) // Realm dependency
 }

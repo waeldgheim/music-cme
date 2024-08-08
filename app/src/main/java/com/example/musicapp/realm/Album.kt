@@ -9,7 +9,9 @@ class Album: RealmObject {
     @PrimaryKey var id: String = ""
     var name: String = ""
     var artistName: String = ""
-    var imageUrl: String = ""
+    var imageUrl: String? = ""
     var releaseData: String = ""
     var genres: RealmList<String> = realmListOf()
+    var copyright: String = ""
+    var url: String? = ""
 }

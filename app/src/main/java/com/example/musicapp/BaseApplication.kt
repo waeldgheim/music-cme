@@ -1,6 +1,7 @@
 package com.example.musicapp
 
 import android.app.Application
+import android.util.Log
 import com.example.musicapp.realm.Album
 import dagger.hilt.android.HiltAndroidApp
 import io.realm.kotlin.Realm

@@ -1,3 +1,6 @@
+package com.example.musicapp
+
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -6,6 +9,7 @@ import androidx.navigation.compose.composable
 import com.example.musicapp.ButtonList
 import com.example.musicapp.Detail
 import com.example.musicapp.screens.screena.ScreenAContent
+import com.example.musicapp.screens.screenb.ScreenBContent
 
 @Composable
 fun MusicNavHost(
