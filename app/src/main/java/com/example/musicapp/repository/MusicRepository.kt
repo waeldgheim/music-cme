@@ -21,6 +21,7 @@ class MusicRepository @Inject constructor(
         withContext(Dispatchers.IO){
             try {
                 val allAlbums = musicAppService.getTopHundred()
+                database.albumDao.deleteAllAlbums()
                 database.albumDao.insertAll(*allAlbums.asDatabaseModel())
             } catch (e: Exception){
                 Log.e("error",e.toString())
