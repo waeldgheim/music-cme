@@ -5,6 +5,7 @@ import com.example.musicapp.BaseApplication
 import com.example.musicapp.network.MusicAppService
 import com.example.musicapp.network.asRealmModel
 import com.example.musicapp.realm.Album
+import io.realm.kotlin.Realm
 import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.ext.query
 import kotlinx.coroutines.CoroutineScope
@@ -17,10 +18,11 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class MusicRepository @Inject constructor(private val musicAppService: MusicAppService) {
-
+class MusicRepository @Inject constructor(
+    private val musicAppService: MusicAppService,
+    private val realm: Realm
+) {
     private val repositoryScope = CoroutineScope(Dispatchers.IO)
-    private val realm = BaseApplication.realm
     lateinit var albumDetails: Album
 
     val albums: StateFlow<List<Album>> = realm
