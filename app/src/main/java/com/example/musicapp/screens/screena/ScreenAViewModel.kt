@@ -25,4 +25,9 @@ class ScreenAViewModel @Inject constructor (
             }
         }
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        repository.close()
+    }
 }

@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ScreenBViewModel @Inject constructor(
-    private val musicRepository: MusicRepository
+    private val repository: MusicRepository
 ): ViewModel() {
 
     private val _albumDetails = MutableStateFlow<Album?>(null)
@@ -24,11 +24,16 @@ class ScreenBViewModel @Inject constructor(
             try {
                 Log.i("mytag", albumDetails.toString())
 
-                musicRepository.getAlbumById(id)
-                _albumDetails.value = musicRepository.albumDetails
+                repository.getAlbumById(id)
+                _albumDetails.value = repository.albumDetails
             } catch (e:Exception){
                 _albumDetails.value = null
             }
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        repository.close()
     }
 }

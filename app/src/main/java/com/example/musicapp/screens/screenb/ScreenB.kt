@@ -54,7 +54,7 @@ fun ScreenBContent(albumId: String?) {
                 )
             }
             Spacer(modifier = Modifier.size(8.dp))
-            Text(text = album.releaseData, fontSize = 18.sp)
+            Text(text = album.releaseDate, fontSize = 18.sp)
             Spacer(modifier = Modifier.size(16.dp))
             Text(text = album.copyright, fontSize = 18.sp)
             Spacer(modifier = Modifier.size(8.dp))

@@ -34,7 +34,7 @@ fun NetworkAlbumResponse.asRealmModel(): Array<Album> {
             artistName = it.artistName
             genres = realmListOf(*it.genres.map { genre -> genre.name }.toTypedArray())
             imageUrl = it.imageUrl
-            releaseData = it.releaseDate
+            releaseDate = it.releaseDate
             copyright = feed.copyright
             url = it.url
         }

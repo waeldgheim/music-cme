@@ -58,8 +58,9 @@ class MusicRepository @Inject constructor(
         }
     }
 
-    fun clear() { // for later: hande closing realm in hilt
-        realm.close()
+    fun close() {
+        if (!realm.isClosed())
+            realm.close()
         repositoryScope.cancel()
     }
 }

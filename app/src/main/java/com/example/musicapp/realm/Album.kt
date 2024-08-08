@@ -10,7 +10,7 @@ class Album: RealmObject {
     var name: String = ""
     var artistName: String = ""
     var imageUrl: String? = ""
-    var releaseData: String = ""
+    var releaseDate: String = ""
     var genres: RealmList<String> = realmListOf()
     var copyright: String = ""
     var url: String? = ""
