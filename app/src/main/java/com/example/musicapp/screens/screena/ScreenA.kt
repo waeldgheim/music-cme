@@ -1,7 +1,7 @@
 package com.example.musicapp.screens.screena
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -18,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
@@ -31,32 +30,37 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.example.musicapp.network.NetworkAlbum
+import com.example.musicapp.Detail
+import com.example.musicapp.realm.Album
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
+
 @Composable
 fun ScreenAContent(navController: NavController) {
-val viewModel: ScreenAViewModel = hiltViewModel()
-val albumList by viewModel.album.collectAsState()
+    val viewModel: ScreenAViewModel = hiltViewModel()
+    val albumList by viewModel.albums.collectAsState(initial = emptyList())
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(16.dp),
         modifier = Modifier.fillMaxSize()
     ) {
         items(albumList) { album ->
-            AlbumItem(album = album)
+            AlbumItem(album = album, navController)
         }
     }
 }
 
 @Composable
-fun AlbumItem(album: NetworkAlbum) {
+fun AlbumItem(album: Album, navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
+            .clickable {
+                navController.navigate("${Detail.route}/${album.id}")
+            }
     ) {
         album.imageUrl?.let {
             GlideImage(
