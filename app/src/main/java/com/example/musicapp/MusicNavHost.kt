@@ -1,11 +1,12 @@
+package com.example.musicapp
+
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.musicapp.ButtonList
-import com.example.musicapp.Detail
 import com.example.musicapp.screens.screena.ScreenAContent
+import com.example.musicapp.screens.screenb.ScreenBContent
 
 @Composable
 fun MusicNavHost(
@@ -20,9 +21,9 @@ fun MusicNavHost(
         composable(ButtonList.route) {
             ScreenAContent(navController)
         }
-        composable("${Detail.route}/{buttonId}") { backStackEntry ->
-            val buttonId = backStackEntry.arguments?.getString("buttonId")
-            ScreenBContent(buttonId)
+        composable("${Detail.route}/{albumId}") { backStackEntry ->
+            val albumId = backStackEntry.arguments?.getString("albumId")
+            ScreenBContent(albumId)
         }
     }
 }
