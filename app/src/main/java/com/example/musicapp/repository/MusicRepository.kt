@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+enum class ApiStatus {LOADING, ERROR, DONE}
+
 class MusicRepository @Inject constructor(
     private val database: MusicDatabase,
     private val musicAppService: MusicAppService) {
