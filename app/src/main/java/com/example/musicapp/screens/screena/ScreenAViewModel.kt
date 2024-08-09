@@ -12,6 +12,8 @@ class ScreenAViewModel @Inject constructor (
     private val musicRepository: MusicRepository
 ): ViewModel() {
 
+    val status = musicRepository.status
+
     init {
         viewModelScope.launch {
             musicRepository.refreshAlbums()
