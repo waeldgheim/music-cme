@@ -24,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
@@ -38,6 +39,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.musicapp.Detail
 import com.example.musicapp.database.DatabaseAlbum
 import com.example.musicapp.repository.ApiStatus
+import com.example.musicapp.ui.theme.Blue1
 import com.example.musicapp.ui.theme.LoadingAnimation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -74,7 +76,8 @@ fun ScreenAContent(navController: NavController) {
                     modifier = Modifier
                         .size(200.dp)
                         .padding(16.dp)
-                        .clickable {viewModel.refresh()}
+                        .clickable {viewModel.refresh()},
+                    tint = Blue1
                 )
             }
         }

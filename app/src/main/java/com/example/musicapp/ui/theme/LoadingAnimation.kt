@@ -21,7 +21,7 @@ import kotlinx.coroutines.delay
 fun LoadingAnimation(
     modifier: Modifier = Modifier,
     circleSize: Dp = 25.dp,
-    circleColor: Color = MaterialTheme.colorScheme.primary,
+    circleColor: Color = Blue1,
     travelDistance: Dp = 20.dp
 ) {
     val circles = listOf(
