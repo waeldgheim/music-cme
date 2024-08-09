@@ -7,6 +7,9 @@ import com.example.musicapp.network.MusicAppService
 import com.example.musicapp.network.asDatabaseModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -15,6 +18,10 @@ enum class ApiStatus {LOADING, ERROR, DONE}
 class MusicRepository @Inject constructor(
     private val database: MusicDatabase,
     private val musicAppService: MusicAppService) {
+
+    private val _status = MutableStateFlow<ApiStatus>(ApiStatus.LOADING)
+    val status: StateFlow<ApiStatus>
+        get() = _status
 
     var albums: Flow<List<DatabaseAlbum>> = database.albumDao.getAllAlbums()
     lateinit var albumDetails: DatabaseAlbum
