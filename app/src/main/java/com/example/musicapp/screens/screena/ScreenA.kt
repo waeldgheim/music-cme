@@ -32,6 +32,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.musicapp.Detail
 import com.example.musicapp.database.DatabaseAlbum
+import com.example.musicapp.repository.ApiStatus
+import com.example.musicapp.ui.theme.LoadingAnimation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -40,13 +42,29 @@ import kotlinx.coroutines.withContext
 fun ScreenAContent(navController: NavController) {
     val viewModel: ScreenAViewModel = hiltViewModel()
     val albumList by viewModel.albums.collectAsState(initial = emptyList())
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(16.dp),
-        modifier = Modifier.fillMaxSize()
-    ) {
-        items(albumList) { album ->
-            AlbumItem(album = album, navController)
+    val status by viewModel.status.collectAsState()
+
+    when (status) {
+        ApiStatus.DONE -> {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                contentPadding = PaddingValues(60.dp),
+                modifier = Modifier.fillMaxSize()
+            ) {
+                items(albumList) { album ->
+                    AlbumItem(album = album, navController)
+                }
+            }
+        }
+
+        ApiStatus.ERROR -> {
+            Text(
+                text = "An error occurred.",
+            )
+        }
+
+        ApiStatus.LOADING -> {
+            LoadingAnimation()
         }
     }
 }
