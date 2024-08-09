@@ -1,6 +1,5 @@
 package com.example.musicapp.repository
 
-import android.util.Log
 import com.example.musicapp.database.DatabaseAlbum
 import com.example.musicapp.database.MusicDatabase
 import com.example.musicapp.network.MusicAppService
@@ -9,7 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -29,13 +28,16 @@ class MusicRepository @Inject constructor(
     suspend fun refreshAlbums(){
         withContext(Dispatchers.IO){
             try {
+                _status.value = ApiStatus.LOADING
                 val allAlbums = musicAppService.getTopHundred()
+                _status.value = ApiStatus.DONE
                 database.albumDao.deleteAllAlbums()
                 database.albumDao.insertAll(*allAlbums.asDatabaseModel())
             } catch (e: Exception){
-                Log.e("error",e.toString())
+                if (albums.first().isEmpty()){
+                    _status.value = ApiStatus.ERROR
+                }
             }
-
         }
     }
 
