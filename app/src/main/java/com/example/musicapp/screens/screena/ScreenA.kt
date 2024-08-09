@@ -16,8 +16,13 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -45,6 +50,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScreenAContent(navController: NavController) {
     val viewModel: ScreenAViewModel = hiltViewModel()
@@ -53,15 +59,39 @@ fun ScreenAContent(navController: NavController) {
 
     when (status) {
         ApiStatus.DONE -> {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                contentPadding = PaddingValues(60.dp),
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(albumList) { album ->
-                    AlbumItem(album = album, navController)
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        title = { Text(text = "Top 100 Albums") },
+                        actions = {
+                            IconButton(onClick = { viewModel.refresh() }) {
+                                Icon(
+                                    imageVector = Icons.Filled.Refresh,
+                                    contentDescription = null
+                                )
+                            }
+                        },
+                        colors = TopAppBarDefaults.smallTopAppBarColors(
+                            containerColor = Blue1,
+                            titleContentColor = Color.White,
+                            actionIconContentColor = Color.White
+                        )
+                    )
+                },
+                content = { innerPadding ->
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                    ) {
+                        items(albumList) { album ->
+                            AlbumItem(album = album, navController)
+                        }
+                    }
                 }
-            }
+            )
         }
 
         ApiStatus.ERROR -> {
