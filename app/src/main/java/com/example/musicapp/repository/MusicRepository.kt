@@ -37,6 +37,9 @@ class MusicRepository @Inject constructor(
                 if (albums.first().isEmpty()){
                     _status.value = ApiStatus.ERROR
                 }
+                else{
+                    _status.value = ApiStatus.DONE
+                }
             }
         }
     }
