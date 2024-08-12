@@ -50,6 +50,7 @@ fun ScreenAContent(navController: NavController) {
 
     LoadingIcon(viewModel.statusApi)
     RefreshIcon(viewModel.statusApi, onClick = { viewModel.fetchAlbums() })
+    ErrorIcon(viewModel.statusApi, errorMessage = "Failed to fetch data. Please try again.", onRetry = { viewModel.fetchAlbums() } )
 
     if (apiStatus != ApiStatus.ERROR && apiStatus != ApiStatus.LOADING) {
         AlbumGrid(albums = viewModel.albums, navController = navController)
