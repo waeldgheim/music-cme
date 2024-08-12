@@ -34,7 +34,11 @@ class MusicRepository @Inject constructor(
             try {
                 _status.value = ApiStatus.LOADING
                 delay(1000)
-                _status.value = ApiStatus.DONE
+
+                if (albums.first().isNotEmpty()){
+                    _status.value = ApiStatus.DONE
+                }
+
                 val allAlbums = musicAppService.getTopHundred()
 
                 for (album in albums.first()) {
