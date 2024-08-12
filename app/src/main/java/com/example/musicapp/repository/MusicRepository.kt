@@ -8,6 +8,7 @@ import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.ext.query
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -23,7 +24,7 @@ class MusicRepository @Inject constructor(
     private val musicAppService: MusicAppService,
     private val realm: Realm
 ) {
-    private val _status = MutableStateFlow<ApiStatus>(ApiStatus.REFRESHING)
+    private val _status = MutableStateFlow<ApiStatus>(ApiStatus.DONE)
     val status: StateFlow<ApiStatus> = _status.asStateFlow()
 
     private val repositoryScope = CoroutineScope(Dispatchers.IO)
@@ -47,22 +48,24 @@ class MusicRepository @Inject constructor(
     suspend fun refreshAlbums() {
         withContext(Dispatchers.IO) {
             try {
-                _status.value = if (albums.value.isEmpty()) ApiStatus.LOADING else ApiStatus.REFRESHING
+                _status.value = if (albums.value.isEmpty()) ApiStatus.LOADING else ApiStatus.DONE
 
-                val networkAlbums = musicAppService.getTopHundred().asRealmModel()
-                _status.value = ApiStatus.DONE
+                val networkAlbums = musicAppService.getTopHundred()
+                val networkToRealm = networkAlbums.asRealmModel()
 
-                if (!areAlbumsEqual(albums.value, networkAlbums)) {
+                if (!areAlbumsEqual(albums.value, networkToRealm)) {
                     realm.write {
                         deleteAll()
-                        networkAlbums.forEach { album ->
+                        networkToRealm.forEach { album ->
                             copyToRealm(album, updatePolicy = UpdatePolicy.ALL)
                         }
                     }
+                    _status.value = ApiStatus.DONE
                 }
             } catch (e: Exception) {
                 _status.value = if (albums.value.isEmpty()) ApiStatus.ERROR else ApiStatus.DONE
             }
+            if (albums.value.isNotEmpty()) _status.value = ApiStatus.DONE
         }
     }
 

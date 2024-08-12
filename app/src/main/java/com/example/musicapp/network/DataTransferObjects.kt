@@ -40,4 +40,3 @@ fun NetworkAlbumResponse.asRealmModel(): List<Album> {
         }
     }
 }
-
