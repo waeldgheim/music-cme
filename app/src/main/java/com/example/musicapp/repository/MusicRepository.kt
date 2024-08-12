@@ -47,22 +47,38 @@ class MusicRepository @Inject constructor(
     suspend fun refreshAlbums() {
         withContext(Dispatchers.IO) {
             try {
-                if (albums.value.isEmpty()) _status.value = ApiStatus.LOADING
-                else _status.value = ApiStatus.REFRESHING
+                _status.value = if (albums.value.isEmpty()) ApiStatus.LOADING else ApiStatus.REFRESHING
 
-                val networkAlbums = musicAppService.getTopHundred()
+                val networkAlbums = musicAppService.getTopHundred().asRealmModel()
                 _status.value = ApiStatus.DONE
 
-                realm.write {
-                    deleteAll()
-                    networkAlbums.asRealmModel().forEach { album ->
-                        copyToRealm(album, updatePolicy = UpdatePolicy.ALL)
+                if (!areAlbumsEqual(albums.value, networkAlbums)) {
+                    realm.write {
+                        deleteAll()
+                        networkAlbums.forEach { album ->
+                            copyToRealm(album, updatePolicy = UpdatePolicy.ALL)
+                        }
                     }
                 }
             } catch (e: Exception) {
-                if (albums.value.isEmpty()) _status.value = ApiStatus.ERROR
-                else _status.value = ApiStatus.DONE
+                _status.value = if (albums.value.isEmpty()) ApiStatus.ERROR else ApiStatus.DONE
             }
+        }
+    }
+
+    private fun List<Album>.toHashMap(): Map<String, Album> {
+        return associateBy { it.id }
+    }
+
+    private fun areAlbumsEqual(oldList: List<Album>, newList: List<Album>): Boolean {
+        val oldMap = oldList.toHashMap()
+        val newMap = newList.toHashMap()
+
+        if (oldMap.size != newMap.size) return false
+
+        return oldMap.all { (id, oldAlbum) ->
+            val newAlbum = newMap[id]
+            newAlbum != null && oldAlbum == newAlbum
         }
     }
 }

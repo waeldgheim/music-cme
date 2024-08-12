@@ -26,7 +26,7 @@ data class Genre(
     val name: String,
 )
 
-fun NetworkAlbumResponse.asRealmModel(): Array<Album> {
+fun NetworkAlbumResponse.asRealmModel(): List<Album> {
     return feed.results.map {
         Album().apply {
             id = it.id
@@ -38,6 +38,6 @@ fun NetworkAlbumResponse.asRealmModel(): Array<Album> {
             copyright = feed.copyright
             url = it.url
         }
-    }.toTypedArray()
+    }
 }
 
