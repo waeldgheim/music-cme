@@ -1,4 +1,3 @@
-
 package com.example.musicapp.screens.screenb
 
 import android.util.Log
@@ -15,25 +14,21 @@ import javax.inject.Inject
 @HiltViewModel
 class ScreenBViewModel @Inject constructor(
     private val repository: MusicRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val _albumDetails = MutableStateFlow<Album?>(null)
     val albumDetails: StateFlow<Album?> = _albumDetails
-    fun getAlbumDetails(id: String){
+    fun getAlbumDetails(id: String) {
         viewModelScope.launch {
             try {
                 Log.i("mytag", albumDetails.toString())
 
                 repository.getAlbumById(id)
                 _albumDetails.value = repository.albumDetails
-            } catch (e:Exception){
+            } catch (e: Exception) {
                 _albumDetails.value = null
             }
         }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        repository.close()
-    }
 }

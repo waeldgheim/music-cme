@@ -81,4 +81,25 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.library.base) // Realm dependency
+
+//    implementation("androidx.compose.runtime:runtime:1.5.0")
+//    implementation(libs.material3)
+//    implementation(libs.ui)
+    implementation(libs.androidx.runtime)
+    implementation(libs.androidx.animation)
+
+    //svg
+//    implementation(libs.coil.compose)
+    // or and ?
+//    implementation(libs.accompanist.svg)
+
+    // png
+    implementation(libs.ui)
+    implementation(libs.androidx.foundation)
+
+    // animation
+    implementation(libs.androidx.animation.v150)
+
+    //swipe refresh
+    implementation(libs.accompanist.swiperefresh)
 }

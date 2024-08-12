@@ -3,16 +3,12 @@ package com.example.musicapp.screens.screena
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -35,31 +31,57 @@ import com.example.musicapp.realm.Album
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import com.example.musicapp.repository.ApiStatus
+import com.example.musicapp.screens.components.ErrorIcon
+import com.example.musicapp.screens.components.LoadingIcon
+import com.example.musicapp.screens.components.RefreshIcon
+import kotlinx.coroutines.flow.StateFlow
+
 
 
 @Composable
 fun ScreenAContent(navController: NavController) {
     val viewModel: ScreenAViewModel = hiltViewModel()
-    val albumList by viewModel.albums.collectAsState(initial = emptyList())
+    val apiStatus by viewModel.statusApi.collectAsState(initial = ApiStatus.REFRESHING)
+
+    LoadingIcon(viewModel.statusApi)
+
+    if (apiStatus != ApiStatus.ERROR && apiStatus != ApiStatus.LOADING) {
+        AlbumGrid(albums = viewModel.albums, navController = navController)
+    }
+}
+
+@Composable
+fun AlbumGrid(albums:  StateFlow<List<Album>>, navController: NavController) {
+    val albumList by albums.collectAsState(initial = emptyList())
+
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(16.dp),
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 40.dp)
     ) {
         items(albumList) { album ->
-            AlbumItem(album = album, navController)
+            AlbumItem(album = album, onAlbumClick = {
+                navController.navigate("${Detail.route}/${it.id}")
+            })
         }
     }
 }
 
 @Composable
-fun AlbumItem(album: Album, navController: NavController) {
+fun AlbumItem(album: Album, onAlbumClick: (Album) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
             .clickable {
-                navController.navigate("${Detail.route}/${album.id}")
+                onAlbumClick(album)
             }
     ) {
         album.imageUrl?.let {
@@ -74,6 +96,7 @@ fun AlbumItem(album: Album, navController: NavController) {
         Text(text = album.artistName, fontSize = 16.sp)
     }
 }
+
 
 @Composable
 fun GlideImage(
