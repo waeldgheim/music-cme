@@ -31,7 +31,7 @@ class MusicRepository @Inject constructor(
     suspend fun refreshAlbums(){
         withContext(Dispatchers.IO){
             try {
-                _status.value = ApiStatus.LOADING
+                _status.value = ApiStatus.DONE
                 val allAlbums = musicAppService.getTopHundred()
 
                 for (album in albums.first()) {
@@ -42,8 +42,13 @@ class MusicRepository @Inject constructor(
                     networkMap[album.id] = album
                 }
 
-                database.albumDao.deleteAllAlbums()
-                database.albumDao.insertAll(*allAlbums.asDatabaseModel())
+                if (networkMap != databaseMap) {
+                    _status.value = ApiStatus.LOADING
+                    database.albumDao.deleteAllAlbums()
+                    database.albumDao.insertAll(*allAlbums.asDatabaseModel())
+                    _status.value = ApiStatus.DONE
+                }
+
             } catch (e: Exception){
                 if (albums.first().isEmpty()){
                     _status.value = ApiStatus.ERROR
