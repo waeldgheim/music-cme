@@ -25,6 +25,9 @@ class MusicRepository @Inject constructor(
     var albums: Flow<List<DatabaseAlbum>> = database.albumDao.getAllAlbums()
     lateinit var albumDetails: DatabaseAlbum
 
+    private val databaseMap: MutableMap<String, DatabaseAlbum> = HashMap()
+    private val networkMap: MutableMap<String, DatabaseAlbum> = HashMap()
+
     suspend fun refreshAlbums(){
         withContext(Dispatchers.IO){
             try {
