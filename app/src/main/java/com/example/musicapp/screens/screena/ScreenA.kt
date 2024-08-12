@@ -49,6 +49,7 @@ fun ScreenAContent(navController: NavController) {
     val apiStatus by viewModel.statusApi.collectAsState(initial = ApiStatus.REFRESHING)
 
     LoadingIcon(viewModel.statusApi)
+    RefreshIcon(viewModel.statusApi, onClick = { viewModel.fetchAlbums() })
 
     if (apiStatus != ApiStatus.ERROR && apiStatus != ApiStatus.LOADING) {
         AlbumGrid(albums = viewModel.albums, navController = navController)
