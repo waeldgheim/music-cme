@@ -5,6 +5,7 @@ import com.example.musicapp.database.MusicDatabase
 import com.example.musicapp.network.MusicAppService
 import com.example.musicapp.network.asDatabaseModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,6 +32,8 @@ class MusicRepository @Inject constructor(
     suspend fun refreshAlbums(){
         withContext(Dispatchers.IO){
             try {
+                _status.value = ApiStatus.LOADING
+                delay(1000)
                 _status.value = ApiStatus.DONE
                 val allAlbums = musicAppService.getTopHundred()
 
