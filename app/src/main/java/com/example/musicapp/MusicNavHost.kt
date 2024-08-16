@@ -23,7 +23,7 @@ fun MusicNavHost(
         }
         composable("${Detail.route}/{albumId}") { backStackEntry ->
             val albumId = backStackEntry.arguments?.getString("albumId")
-            ScreenBContent(albumId)
+            ScreenBContent(albumId, navController)
         }
     }
 }
