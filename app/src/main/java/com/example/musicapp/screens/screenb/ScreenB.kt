@@ -94,9 +94,9 @@ fun ScreenBContent(albumId: String?, navController: NavController) {
                         imageUrl = album.imageUrl,
                         contentDescription = null,
                         modifier = Modifier
-                            .size(screenWidth - 40.dp)
+                            .size(screenWidth * 0.7f)
                             .clip(RoundedCornerShape(20.dp))
-                            .align(Alignment.CenterHorizontally)
+//                            .align(Alignment.CenterHorizontally)
                     )
 
                     Spacer(modifier = Modifier.height(10.dp))
@@ -131,7 +131,7 @@ fun ScreenBContent(albumId: String?, navController: NavController) {
                                         color = MaterialTheme.colorScheme.secondary,
                                         shape = CircleShape
                                     )
-                                    .padding(vertical = 3.dp, horizontal = 5.dp),
+                                    .padding(vertical = 5.dp, horizontal = 8.dp),
 
                                 )
                         }

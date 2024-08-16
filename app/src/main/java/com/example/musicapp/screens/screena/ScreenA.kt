@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,7 +18,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,7 +37,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -49,10 +46,10 @@ import androidx.navigation.NavController
 import com.example.musicapp.Detail
 import com.example.musicapp.database.DatabaseAlbum
 import com.example.musicapp.repository.ApiStatus
+import com.example.musicapp.screens.components.ColorPickerDialog
 import com.example.musicapp.screens.components.GlideImage
 import com.example.musicapp.ui.theme.LoadingAnimation
 import com.example.musicapp.ui.theme.MusicAppTheme
-import com.example.musicapp.ui.theme.Theme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -107,7 +104,12 @@ fun ScreenA(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Top 100 Albums") },
+                title = {
+                    Text(
+                        text = "Top 100 Albums",
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                },
                 actions = {
                     IconButton(onClick = { showDialog = true }) {
                         Icon(
@@ -150,50 +152,9 @@ fun ScreenA(
             }
         }
     )
-    val colorOptions = listOf(
-        0xFF00FFFF, 0xFF15f9a6, 0xFFFF1493, 0xFFFF7F50, 0xFF40E0D0, 0xFFFF7F50,
-        0xFF6A5ACD, 0xFFBA55D3, 0xFFFF4500, 0xFF8A2BE2, 0xFFDE3163, 0xFF5F9EA0,
-        0xFF7FFF00, 0xFFD2691E, 0xFFFF7F24, 0xFFDC143C, 0xFF00008B, 0xFF008B8B,
-        0xFFB8860B, 0xFFA9A9A9, 0xFF006400, 0xFF8B008B, 0xFF8B0000, 0xFF483D8B, 0xFF6495ED
-    )
 
-    val colorsPerRow = 5
-
-    if (showDialog) {
-        AlertDialog(
-            onDismissRequest = { showDialog = false },
-            title = { Text(text = "Choose Color") },
-            text = {
-                Column {
-                    colorOptions.chunked(colorsPerRow).forEach { rowColors ->
-                        Row {
-                            rowColors.forEach { colorHex ->
-                                ColorOption(Color(colorHex)) { c ->
-                                    Theme.saveColor(c.toArgb().toLong())
-                                    viewModel.updateColor(c.toArgb().toLong())
-                                    showDialog = false
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            confirmButton = {}
-        )
-    }
+    ColorPickerDialog(showDialog, { showDialog = false }, viewModel)
 }
-
-@Composable
-fun ColorOption(color: Color, onColorSelected: (Color) -> Unit) {
-    Box(
-        modifier = Modifier
-            .size(50.dp)
-            .padding(4.dp)
-            .background(color)
-            .clickable { onColorSelected(color) }
-    )
-}
-
 
 @Composable
 fun AlbumItem(album: DatabaseAlbum, navController: NavController) {
@@ -235,7 +196,7 @@ fun AlbumItem(album: DatabaseAlbum, navController: NavController) {
                 ) {
                     Text(
                         text = album.name,
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = Color.White,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,
@@ -244,7 +205,7 @@ fun AlbumItem(album: DatabaseAlbum, navController: NavController) {
                     )
                     Text(
                         text = album.artistName,
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = Color.White,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,
