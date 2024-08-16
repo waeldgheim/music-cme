@@ -102,11 +102,20 @@ fun ScreenA(
     albumList: List<DatabaseAlbum>,
     navController: NavController,
 ) {
+    var showDialog by remember { mutableStateOf(false) }
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(text = "Top 100 Albums") },
                 actions = {
+                    IconButton(onClick = { showDialog = true }) {
+                        Icon(
+                            imageVector = Icons.Filled.Palette,
+                            contentDescription = "Choose Color",
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
                     IconButton(onClick = { viewModel.refresh() }) {
                         Icon(
                             imageVector = Icons.Filled.Refresh,
@@ -141,7 +150,50 @@ fun ScreenA(
             }
         }
     )
+    val colorOptions = listOf(
+        0xFF00FFFF, 0xFF15f9a6, 0xFFFF1493, 0xFFFF7F50, 0xFF40E0D0, 0xFFFF7F50,
+        0xFF6A5ACD, 0xFFBA55D3, 0xFFFF4500, 0xFF8A2BE2, 0xFFDE3163, 0xFF5F9EA0,
+        0xFF7FFF00, 0xFFD2691E, 0xFFFF7F24, 0xFFDC143C, 0xFF00008B, 0xFF008B8B,
+        0xFFB8860B, 0xFFA9A9A9, 0xFF006400, 0xFF8B008B, 0xFF8B0000, 0xFF483D8B, 0xFF6495ED
+    )
+
+    val colorsPerRow = 5
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text(text = "Choose Color") },
+            text = {
+                Column {
+                    colorOptions.chunked(colorsPerRow).forEach { rowColors ->
+                        Row {
+                            rowColors.forEach { colorHex ->
+                                ColorOption(Color(colorHex)) { c ->
+                                    Theme.saveColor(c.toArgb().toLong())
+                                    viewModel.updateColor(c.toArgb().toLong())
+                                    showDialog = false
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            confirmButton = {}
+        )
+    }
 }
+
+@Composable
+fun ColorOption(color: Color, onColorSelected: (Color) -> Unit) {
+    Box(
+        modifier = Modifier
+            .size(50.dp)
+            .padding(4.dp)
+            .background(color)
+            .clickable { onColorSelected(color) }
+    )
+}
+
 
 @Composable
 fun AlbumItem(album: DatabaseAlbum, navController: NavController) {

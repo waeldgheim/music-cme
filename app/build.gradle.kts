@@ -53,7 +53,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -69,6 +68,7 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.com.squareup.moshi.moshi)
     implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.palette.ktx)
     annotationProcessor(libs.androidx.room.compiler)
     kapt("androidx.room:room-compiler:2.6.1")
     implementation(libs.androidx.room.ktx)
@@ -83,4 +83,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation (libs.androidx.material.icons.core)
+    implementation (libs.androidx.material.icons.extended)
 }
