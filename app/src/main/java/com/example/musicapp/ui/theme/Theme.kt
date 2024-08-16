@@ -9,6 +9,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.example.musicapp.ui.theme.ColorUtils.darkenColor
+import com.example.musicapp.ui.theme.ColorUtils.isLuminant
 import com.example.musicapp.ui.theme.ColorUtils.lightenColor
 
 
@@ -42,7 +43,7 @@ fun MusicAppTheme(
         primary = color,
         secondary = lightenColor(color, 0.3f),
         background = lightenColor(color, 0.9f),
-        onPrimary = Color(0xFFFFFFFF),
+        onPrimary = if (isLuminant(color)) Color(0xFF000000) else  Color(0xFFFFFFFF),
         onSecondary = Color(0xFF808080),
         onBackground = Color(0xFF000000)
     )
@@ -51,8 +52,8 @@ fun MusicAppTheme(
         primary = color,
         secondary = darkenColor(color, 0.5f),
         background = darkenColor(color, 0.9f),
-        onPrimary = Color(0xFFFFFFFF),
-        onSecondary = Color(0xFF808080),
+        onPrimary = if (isLuminant(color)) Color(0xFF000000) else  Color(0xFFFFFFFF),
+        onSecondary = Color(0xFFA5A5A5),
         onBackground = Color(0xFFFFFFFF)
     )
 

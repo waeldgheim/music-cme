@@ -2,6 +2,7 @@ package com.example.musicapp.ui.theme
 
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 
 
 object ColorUtils {
@@ -21,5 +22,10 @@ object ColorUtils {
             green = (color.green * (1f - clampedFactor)).coerceIn(0f, 1f),
             blue = (color.blue * (1f - clampedFactor)).coerceIn(0f, 1f)
         )
+    }
+
+    fun isLuminant(color: Color): Boolean {
+        val luminance = color.luminance()
+        return luminance > 0.5
     }
 }
