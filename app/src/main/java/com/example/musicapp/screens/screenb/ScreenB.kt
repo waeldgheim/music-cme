@@ -41,7 +41,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.musicapp.screens.components.GlideImage
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.example.musicapp.R
 import com.example.musicapp.ui.theme.MusicAppTheme
 import com.example.musicapp.ui.theme.Theme
 
@@ -90,18 +92,22 @@ fun ScreenBContent(albumId: String?, navController: NavController) {
                 ) {
                     val configuration = LocalConfiguration.current
                     val screenWidth = configuration.screenWidthDp.dp
-                    GlideImage(
-                        imageUrl = album.imageUrl,
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(album.imageUrl)
+                            .error(R.drawable.baseline_cloud_off_24)
+                            .placeholder(R.drawable.baseline_loop_24)
+                            .build(),
                         contentDescription = null,
                         modifier = Modifier
-                            .size(screenWidth - 40.dp )
+                            .size(screenWidth - 40.dp)
                             .clip(RoundedCornerShape(20.dp))
                             .align(Alignment.CenterHorizontally)
                     )
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    Column{
+                    Column {
                         Text(
                             text = album.name,
                             fontSize = 20.sp,

@@ -37,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -44,11 +45,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.musicapp.Detail
+import com.example.musicapp.R
 import com.example.musicapp.database.DatabaseAlbum
 import com.example.musicapp.repository.ApiStatus
 import com.example.musicapp.screens.components.ColorPickerDialog
-import com.example.musicapp.screens.components.GlideImage
 import com.example.musicapp.ui.theme.LoadingAnimation
 import com.example.musicapp.ui.theme.MusicAppTheme
 
@@ -174,10 +177,15 @@ fun AlbumItem(album: DatabaseAlbum, navController: NavController) {
                 .clip(roundedCornerShape)
         ) {
             album.imageUrl?.let {
-                GlideImage(
-                    imageUrl = it,
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(album.imageUrl)
+                        .error(R.drawable.baseline_cloud_off_24)
+                        .placeholder(R.drawable.baseline_loop_24)
+                        .build(),
                     contentDescription = null,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier
+                        .fillMaxSize()
                 )
             }
 
@@ -214,8 +222,7 @@ fun AlbumItem(album: DatabaseAlbum, navController: NavController) {
                         overflow = TextOverflow.Ellipsis,
                         style = TextStyle(lineHeight = 0.sp),
                         modifier = Modifier.padding(start = 10.dp, bottom = 10.dp),
-
-                        )
+                    )
                 }
             }
         }
