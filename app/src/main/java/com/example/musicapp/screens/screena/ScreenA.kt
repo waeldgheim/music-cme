@@ -37,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -190,7 +191,7 @@ fun AlbumItem(album: DatabaseAlbum, navController: NavController) {
                         .fillMaxWidth()
                         .align(Alignment.BottomStart)
                         .background(
-                            color = Color.Black.copy(alpha = 0.6f)
+                            color = Color.Black.copy(alpha = 0.7f)
                         ),
                     verticalArrangement = Arrangement.Bottom
                 ) {
@@ -201,17 +202,20 @@ fun AlbumItem(album: DatabaseAlbum, navController: NavController) {
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.padding(start = 8.dp)
+                        style = TextStyle(lineHeight = 0.sp),
+                        modifier = Modifier.padding(start = 10.dp, top = 5.dp)
                     )
                     Text(
                         text = album.artistName,
-                        color = Color.White,
+                        color = Color.White.copy(0.7f),
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.padding(start = 8.dp)
-                    )
+                        style = TextStyle(lineHeight = 0.sp),
+                        modifier = Modifier.padding(start = 10.dp, bottom = 10.dp),
+
+                        )
                 }
             }
         }

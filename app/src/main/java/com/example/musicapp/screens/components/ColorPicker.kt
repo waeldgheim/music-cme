@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -72,13 +73,21 @@ fun ColorPickerDialog(
                         Theme.saveColor(pickedColor.toArgb().toLong())
                         viewModel.updateColor(colorLong)
                         onDismiss()
-                    }
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary
+                    )
                 ) {
                     Text(text = "OK", color = MaterialTheme.colorScheme.onPrimary)
                 }
             },
             dismissButton = {
-                Button(onClick = onDismiss) {
+                Button(
+                    onClick = onDismiss,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondary
+                    )
+                ) {
                     Text(text = "Cancel", color = MaterialTheme.colorScheme.onPrimary)
                 }
             }

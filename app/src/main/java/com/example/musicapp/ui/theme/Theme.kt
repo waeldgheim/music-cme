@@ -42,7 +42,7 @@ fun MusicAppTheme(
     val LightColorPalette = lightColorScheme(
         primary = color,
         secondary = lightenColor(color, 0.3f),
-        background = lightenColor(color, 0.9f),
+        background = lightenColor(color, 0.8f),
         onPrimary = if (isLuminant(color)) Color(0xFF000000) else  Color(0xFFFFFFFF),
         onSecondary = Color(0xFF808080),
         onBackground = Color(0xFF000000)
@@ -51,7 +51,7 @@ fun MusicAppTheme(
     val DarkColorPalette = darkColorScheme(
         primary = color,
         secondary = darkenColor(color, 0.5f),
-        background = darkenColor(color, 0.9f),
+        background = darkenColor(color, 0.8f),
         onPrimary = if (isLuminant(color)) Color(0xFF000000) else  Color(0xFFFFFFFF),
         onSecondary = Color(0xFFA5A5A5),
         onBackground = Color(0xFFFFFFFF)
