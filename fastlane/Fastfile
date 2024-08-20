@@ -32,16 +32,23 @@ platform :android do
 
   desc "Deploy a new version to the Google Play"
   lane :deploy do
-    gradle(task: "clean assembleRelease")
+    gradle(
+        task: 'assemble',
+        build_type: 'Release'
+      )
     upload_to_play_store
   end
 
   desc "Deploy a new version to Firebase App Distribution"
   lane :deploy_to_firebase do
-      gradle(task: "clean assembleRelease")
+      gradle(
+              task: 'assemble',
+              build_type: 'Release'
+            )
       firebase_app_distribution(
-        app: "musicapp-cme",
+        app: "1:650340575682:android:c28e54f8184ab2bdb5ce5b",
         groups: "CME"
       )
   end
+
 end
