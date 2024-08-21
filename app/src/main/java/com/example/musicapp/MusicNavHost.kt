@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.musicapp.screens.AlbumDetailsScreen.AlbumDetailsScreen
-import com.example.musicapp.screens.AlbumsScreen.AlbumsScreen
+import com.example.musicapp.screens.AlbumsScreen.AlbumScreen
 
 @Composable
 fun MusicNavHost(
@@ -16,10 +16,16 @@ fun MusicNavHost(
     NavHost(
         navController = navController,
         modifier = modifier,
-        startDestination = ButtonList.route
+        startDestination = Home.route
     ) {
-        composable(ButtonList.route) {
-            AlbumsScreen(navController)
+        composable(Home.route) {
+            AlbumScreen(navController)
+        }
+        composable(Search.route) {
+            SearchScreen()
+        }
+        composable(Settings.route) {
+            SettingsScreen()
         }
         composable("${Detail.route}/{albumId}") { backStackEntry ->
             val albumId = backStackEntry.arguments?.getString("albumId")
