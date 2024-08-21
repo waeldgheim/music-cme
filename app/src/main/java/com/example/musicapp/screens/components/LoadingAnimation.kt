@@ -1,4 +1,4 @@
-package com.example.musicapp.ui.theme
+package com.example.musicapp.screens.components
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -6,9 +6,11 @@ import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.keyframes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
@@ -27,7 +29,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun LoadingAnimation(
     modifier: Modifier = Modifier,
-    circleSize: Dp = 25.dp,
+    circleSize: Dp = 20.dp,
     circleColor: Color = MaterialTheme.colorScheme.primary,
     travelDistance: Dp = 20.dp
 ) {
@@ -62,11 +64,14 @@ fun LoadingAnimation(
     Box(
         modifier = modifier
             .fillMaxSize()
+            .padding(top = 60.dp)
             .background(MaterialTheme.colorScheme.background)
+
     ) {
         Row(
             modifier = Modifier
-                .align(Alignment.Center)
+                .align(Alignment.Center),
+            horizontalArrangement = Arrangement.spacedBy(5.dp)
         ) {
             circleValues.forEach { value ->
                 Box(
