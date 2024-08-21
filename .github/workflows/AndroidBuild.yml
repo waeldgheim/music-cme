@@ -3,7 +3,7 @@
   on:
     push:
       branches:
-        - firebase/automation
+        - main
 
   jobs:
     deploy:
