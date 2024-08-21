@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -52,46 +51,21 @@ import com.example.musicapp.R
 import com.example.musicapp.database.DatabaseAlbum
 import com.example.musicapp.repository.ApiStatus
 import com.example.musicapp.screens.components.ColorPickerDialog
-import com.example.musicapp.ui.theme.LoadingAnimation
+import com.example.musicapp.screens.components.ErrorScreen
+import com.example.musicapp.screens.components.LoadingAnimation
 import com.example.musicapp.ui.theme.MusicAppTheme
+import kotlinx.coroutines.flow.StateFlow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AlbumsScreen(navController: NavController) {
+fun AlbumScreen(navController: NavController) {
     val viewModel: AlbumsViewModel = hiltViewModel()
     val albumList by viewModel.albums.collectAsState(initial = emptyList())
-    val status by viewModel.status.collectAsState()
 
     val color by viewModel.color.collectAsState()
 
     MusicAppTheme(color = color) {
-        when (status) {
-            ApiStatus.LOADING -> {
-                LoadingAnimation()
-            }
-
-            ApiStatus.ERROR -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Refresh,
-                        contentDescription = "Error icon",
-                        modifier = Modifier
-                            .size(200.dp)
-                            .padding(16.dp)
-                            .clickable { viewModel.refresh() },
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                }
-            }
-
-            ApiStatus.DONE -> {
-                AlbumsGrid(viewModel, albumList, navController)
-            }
-        }
+        AlbumsGrid(viewModel, albumList, navController, viewModel.status)
     }
 }
 
@@ -102,8 +76,10 @@ fun AlbumsGrid(
     viewModel: AlbumsViewModel,
     albumList: List<DatabaseAlbum>,
     navController: NavController,
+    statusApi: StateFlow<ApiStatus>
 ) {
     var showDialog by remember { mutableStateOf(false) }
+    val status by statusApi.collectAsState()
 
     Scaffold(
         topBar = {
@@ -138,21 +114,30 @@ fun AlbumsGrid(
             )
         },
         content = { innerPadding ->
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                contentPadding = PaddingValues(
-                    start = 15.dp,
-                    end = 15.dp,
-                    top = 25.dp,
-                    bottom = 8.dp
-                ),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-            ) {
-                items(albumList) { album ->
-                    AlbumItem(album = album, navController = navController)
-                }
+            when (status) {
+                ApiStatus.LOADING ->
+                    LoadingAnimation()
+
+                ApiStatus.ERROR ->
+                    ErrorScreen(onRetry = { viewModel.refresh() })
+
+                else ->
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        contentPadding = PaddingValues(
+                            start = 15.dp,
+                            end = 15.dp,
+                            top = 25.dp,
+                            bottom = 8.dp
+                        ),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                    ) {
+                        items(albumList) { album ->
+                            AlbumItem(album = album, navController = navController)
+                        }
+                    }
             }
         }
     )
