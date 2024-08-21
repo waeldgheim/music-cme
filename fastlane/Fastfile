@@ -50,5 +50,4 @@ platform :android do
         groups: "CME"
       )
   end
-
 end
