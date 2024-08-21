@@ -23,5 +23,8 @@ jobs:
           gem install bundler
           bundle install
 
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
       - name: Run lane deploy_to_firebase
         run: bundle exec fastlane deploy_to_firebase
