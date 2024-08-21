@@ -27,14 +27,14 @@ data class Genre(
     val url: String
 )
 
-fun NetworkAlbumResponse.asDatabaseModel(): Array<DatabaseAlbum>{
-    return feed.results.map{
+fun NetworkAlbumResponse.asDatabaseModel(): Array<DatabaseAlbum> {
+    return feed.results.map {
         DatabaseAlbum(
             id = it.id,
             name = it.name,
             artistName = it.artistName,
             genre = it.genres.joinToString(separator = ", ") { it.name },
-            imageUrl = it.imageUrl,
+            imageUrl = it.imageUrl.replace("100x100", "400x400"),
             releaseDate = it.releaseDate,
             copyright = feed.copyright,
             albumUrl = it.url
