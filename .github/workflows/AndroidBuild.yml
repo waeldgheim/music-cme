@@ -38,7 +38,10 @@
         - name: Install Firebase CLI
           run: npm install -g firebase-tools
 
-        - name: Deploy to Firebase
-          run: firebase deploy --only hosting
-          env:
-            FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        - name: upload to Firebase App Distribution
+          uses: wzieba/Firebase-Distribution-Github-Action@v1.5.1
+          with:
+            appId: ${{ secrets.FIREBASE_APP_ID }}
+            token: ${{ secrets.FIREBASE_TOKEN }}
+            groups: "CME"
+            file: app/build/outputs/apk/debug/app-debug.apk
