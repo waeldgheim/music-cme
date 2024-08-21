@@ -31,7 +31,7 @@ import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.musicapp.R
-import com.example.musicapp.screens.screena.ScreenAViewModel
+import com.example.musicapp.screens.AlbumsScreen.AlbumsViewModel
 import com.example.musicapp.ui.theme.Theme
 import com.github.skydoves.colorpicker.compose.AlphaTile
 import com.github.skydoves.colorpicker.compose.BrightnessSlider
@@ -45,7 +45,7 @@ import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 fun ColorPickerDialog(
     isDialogOpen: Boolean,
     onDismiss: () -> Unit,
-    viewModel: ScreenAViewModel
+    viewModel: AlbumsViewModel
 ) {
     var pickedColor by remember { mutableStateOf(Color.Transparent) }
 

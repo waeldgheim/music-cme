@@ -1,4 +1,4 @@
-package com.example.musicapp.screens.screenb
+package com.example.musicapp.screens.AlbumDetailsScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ScreenBViewModel @Inject constructor(
+class AlbumDetailsViewModel @Inject constructor(
     private val musicRepository: MusicRepository
 ): ViewModel() {
 

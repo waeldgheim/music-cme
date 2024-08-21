@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.com.squareup.moshi.moshi)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.palette.ktx)
+    implementation(libs.androidx.navigation.runtime.ktx)
     annotationProcessor(libs.androidx.room.compiler)
     kapt("androidx.room:room-compiler:2.6.1")
     implementation(libs.androidx.room.ktx)

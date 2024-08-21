@@ -1,7 +1,7 @@
 package com.example.musicapp.di
 
-import com.squareup.moshi.Moshi
 import com.example.musicapp.network.MusicAppService
+import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides

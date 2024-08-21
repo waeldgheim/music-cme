@@ -1,4 +1,4 @@
-package com.example.musicapp.screens.screena
+package com.example.musicapp.screens.AlbumsScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -57,8 +57,8 @@ import com.example.musicapp.ui.theme.MusicAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenAContent(navController: NavController) {
-    val viewModel: ScreenAViewModel = hiltViewModel()
+fun AlbumsScreen(navController: NavController) {
+    val viewModel: AlbumsViewModel = hiltViewModel()
     val albumList by viewModel.albums.collectAsState(initial = emptyList())
     val status by viewModel.status.collectAsState()
 
@@ -89,7 +89,7 @@ fun ScreenAContent(navController: NavController) {
             }
 
             ApiStatus.DONE -> {
-                ScreenA(viewModel, albumList, navController)
+                AlbumsGrid(viewModel, albumList, navController)
             }
         }
     }
@@ -98,8 +98,8 @@ fun ScreenAContent(navController: NavController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenA(
-    viewModel: ScreenAViewModel,
+fun AlbumsGrid(
+    viewModel: AlbumsViewModel,
     albumList: List<DatabaseAlbum>,
     navController: NavController,
 ) {

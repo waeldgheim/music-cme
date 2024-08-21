@@ -1,4 +1,4 @@
-package com.example.musicapp.screens.screena
+package com.example.musicapp.screens.AlbumsScreen
 
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ScreenAViewModel @Inject constructor (
+class AlbumsViewModel @Inject constructor (
     private val musicRepository: MusicRepository
 ): ViewModel() {
     private val _color = MutableStateFlow(Theme.getTColor())

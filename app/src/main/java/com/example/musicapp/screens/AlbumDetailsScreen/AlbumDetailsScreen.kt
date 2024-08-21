@@ -1,4 +1,4 @@
-package com.example.musicapp.screens.screenb
+package com.example.musicapp.screens.AlbumDetailsScreen
 
 import android.content.Intent
 import android.net.Uri
@@ -49,8 +49,8 @@ import com.example.musicapp.ui.theme.Theme
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenBContent(albumId: String?, navController: NavController) {
-    val viewModel: ScreenBViewModel = hiltViewModel()
+fun AlbumDetailsScreen(albumId: String?, navController: NavController) {
+    val viewModel: AlbumDetailsViewModel = hiltViewModel()
     val context = LocalContext.current
 
     albumId?.let {
