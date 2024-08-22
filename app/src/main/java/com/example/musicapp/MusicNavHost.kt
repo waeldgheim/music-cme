@@ -7,6 +7,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.musicapp.screens.AlbumDetailsScreen.AlbumDetailsScreen
 import com.example.musicapp.screens.AlbumsScreen.AlbumScreen
+import com.example.musicapp.screens.FilterScreen.FilterScreen
+import com.example.musicapp.screens.SettingsScreen.SettingsScreen
 
 @Composable
 fun MusicNavHost(
@@ -21,8 +23,8 @@ fun MusicNavHost(
         composable(Home.route) {
             AlbumScreen(navigateToAlbumDetails = {albumId -> navController.navigate("${Detail.route}/${albumId}")})
         }
-        composable(Search.route) {
-            SearchScreen()
+        composable(Filter.route) {
+            FilterScreen(navigateToAlbumDetails = {albumId -> navController.navigate("${Detail.route}/${albumId}")})
         }
         composable(Settings.route) {
             SettingsScreen()

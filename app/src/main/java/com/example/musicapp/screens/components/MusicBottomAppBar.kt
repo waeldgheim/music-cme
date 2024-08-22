@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.FilterAlt
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -20,8 +21,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.musicapp.Filter
 import com.example.musicapp.Home
-import com.example.musicapp.Search
 import com.example.musicapp.Settings
 import com.example.musicapp.ui.theme.MusicAppTheme
 import com.example.musicapp.ui.theme.Theme
@@ -67,19 +68,19 @@ fun MusicBottomAppBar(navController: NavHostController) {
 
                 IconButton(
                     onClick = {
-                        if (selectedRoute.value != Search.route) {
+                        if (selectedRoute.value != Filter.route) {
 
-                            selectedRoute.value = Search.route
-                            navController.navigate(Search.route) {
-                                popUpTo(Search.route) { inclusive = true }
+                            selectedRoute.value = Filter.route
+                            navController.navigate(Filter.route) {
+                                popUpTo(Filter.route) { inclusive = true }
                             }
                         }
                     }, modifier = Modifier.weight(1f)
                 ) {
-                    val isSelected = selectedRoute.value == Search.route
+                    val isSelected = selectedRoute.value == Filter.route
                     Icon(
-                        Icons.Outlined.Search,
-                        contentDescription = "Search",
+                        Icons.Outlined.FilterAlt,
+                        contentDescription = "Filter",
                         tint = if (isSelected) selectedColor else unselectedColor,
                         modifier = Modifier.fillMaxSize(0.8f)
                     )

@@ -12,8 +12,8 @@ data object Detail : MusicDestinations {
     override val route = "detail"
 }
 
-data object Search : MusicDestinations {
-    override val route = "search"
+data object Filter : MusicDestinations {
+    override val route = "filter"
 }
 
 data object Settings : MusicDestinations {
