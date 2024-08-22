@@ -48,6 +48,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.musicapp.R
 import com.example.musicapp.database.DatabaseAlbum
+import com.example.musicapp.screens.components.ColorPickerDialog
 import com.example.musicapp.ui.theme.MusicAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -119,7 +120,6 @@ fun FilterScreen(navigateToAlbumDetails: (String) -> Unit) {
                         }
                     }
 
-                    // Display filtered albums
                     LazyColumn(
                         contentPadding = PaddingValues(
                             start = 20.dp,
@@ -141,7 +141,7 @@ fun FilterScreen(navigateToAlbumDetails: (String) -> Unit) {
             }
         )
     }
-//    ColorPickerDialog(showDialog, { showDialog = false }, viewModel)
+    ColorPickerDialog(showDialog, { showDialog = false }, { c -> viewModel.updateColor(c)})
 }
 
 @Composable
