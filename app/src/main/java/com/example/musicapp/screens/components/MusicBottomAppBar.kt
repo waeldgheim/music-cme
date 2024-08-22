@@ -15,6 +15,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -30,6 +31,13 @@ import com.example.musicapp.ui.theme.Theme
 @Composable
 fun MusicBottomAppBar(navController: NavHostController) {
     val selectedRoute = remember { mutableStateOf(Home.route) }
+
+    LaunchedEffect(navController) {
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            selectedRoute.value = destination.route ?: Home.route
+        }
+    }
+
     MusicAppTheme(color = Theme.getTColor()) {
         BottomAppBar(
             containerColor = MaterialTheme.colorScheme.tertiary,
@@ -55,7 +63,8 @@ fun MusicBottomAppBar(navController: NavHostController) {
                                 popUpTo(Home.route) { inclusive = true }
                             }
                         }
-                    }, modifier = Modifier.weight(1f)
+                    },
+                    modifier = Modifier.weight(1f)
                 ) {
                     val isSelected = selectedRoute.value == Home.route
                     Icon(
@@ -69,13 +78,13 @@ fun MusicBottomAppBar(navController: NavHostController) {
                 IconButton(
                     onClick = {
                         if (selectedRoute.value != Filter.route) {
-
                             selectedRoute.value = Filter.route
                             navController.navigate(Filter.route) {
                                 popUpTo(Filter.route) { inclusive = true }
                             }
                         }
-                    }, modifier = Modifier.weight(1f)
+                    },
+                    modifier = Modifier.weight(1f)
                 ) {
                     val isSelected = selectedRoute.value == Filter.route
                     Icon(
@@ -89,13 +98,13 @@ fun MusicBottomAppBar(navController: NavHostController) {
                 IconButton(
                     onClick = {
                         if (selectedRoute.value != Settings.route) {
-
                             selectedRoute.value = Settings.route
                             navController.navigate(Settings.route) {
                                 popUpTo(Settings.route) { inclusive = true }
                             }
                         }
-                    }, modifier = Modifier.weight(1f)
+                    },
+                    modifier = Modifier.weight(1f)
                 ) {
                     val isSelected = selectedRoute.value == Settings.route
                     Icon(
