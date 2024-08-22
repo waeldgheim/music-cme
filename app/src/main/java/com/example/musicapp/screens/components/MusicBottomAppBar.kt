@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
@@ -45,13 +44,15 @@ fun MusicBottomAppBar(navController: NavHostController) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 val selectedColor = MaterialTheme.colorScheme.onTertiary
-                val unselectedColor = selectedColor.copy(alpha = 0.6f) // Adjust alpha for transparency
+                val unselectedColor = selectedColor.copy(alpha = 0.6f)
 
                 IconButton(
                     onClick = {
-                        selectedRoute.value = Home.route
-                        navController.navigate(Home.route) {
-                            popUpTo(Home.route) { inclusive = true }
+                        if (selectedRoute.value != Home.route) {
+                            selectedRoute.value = Home.route
+                            navController.navigate(Home.route) {
+                                popUpTo(Home.route) { inclusive = true }
+                            }
                         }
                     }, modifier = Modifier.weight(1f)
                 ) {
@@ -66,15 +67,18 @@ fun MusicBottomAppBar(navController: NavHostController) {
 
                 IconButton(
                     onClick = {
-                        selectedRoute.value = Search.route
-                        navController.navigate(Search.route) {
-                            popUpTo(Search.route) { inclusive = true }
+                        if (selectedRoute.value != Search.route) {
+
+                            selectedRoute.value = Search.route
+                            navController.navigate(Search.route) {
+                                popUpTo(Search.route) { inclusive = true }
+                            }
                         }
                     }, modifier = Modifier.weight(1f)
                 ) {
                     val isSelected = selectedRoute.value == Search.route
                     Icon(
-                        Icons.Filled.Search,
+                        Icons.Outlined.Search,
                         contentDescription = "Search",
                         tint = if (isSelected) selectedColor else unselectedColor,
                         modifier = Modifier.fillMaxSize(0.8f)
@@ -83,9 +87,12 @@ fun MusicBottomAppBar(navController: NavHostController) {
 
                 IconButton(
                     onClick = {
-                        selectedRoute.value = Settings.route
-                        navController.navigate(Settings.route) {
-                            popUpTo(Settings.route) { inclusive = true }
+                        if (selectedRoute.value != Settings.route) {
+
+                            selectedRoute.value = Settings.route
+                            navController.navigate(Settings.route) {
+                                popUpTo(Settings.route) { inclusive = true }
+                            }
                         }
                     }, modifier = Modifier.weight(1f)
                 ) {
