@@ -43,10 +43,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.musicapp.Detail
 import com.example.musicapp.R
 import com.example.musicapp.database.DatabaseAlbum
 import com.example.musicapp.repository.ApiStatus
@@ -56,16 +54,15 @@ import com.example.musicapp.screens.components.LoadingAnimation
 import com.example.musicapp.ui.theme.MusicAppTheme
 import kotlinx.coroutines.flow.StateFlow
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AlbumScreen(navController: NavController) {
+fun AlbumScreen(navigateToAlbumDetails: (String) -> Unit) {
     val viewModel: AlbumsViewModel = hiltViewModel()
     val albumList by viewModel.albums.collectAsState(initial = emptyList())
 
     val color by viewModel.color.collectAsState()
 
     MusicAppTheme(color = color) {
-        AlbumsGrid(viewModel, albumList, navController, viewModel.status)
+        AlbumsGrid(viewModel, albumList, navigateToAlbumDetails, viewModel.status)
     }
 }
 
@@ -75,7 +72,7 @@ fun AlbumScreen(navController: NavController) {
 fun AlbumsGrid(
     viewModel: AlbumsViewModel,
     albumList: List<DatabaseAlbum>,
-    navController: NavController,
+    navigateToAlbumDetails: (String) -> Unit,
     statusApi: StateFlow<ApiStatus>
 ) {
     var showDialog by remember { mutableStateOf(false) }
@@ -135,7 +132,7 @@ fun AlbumsGrid(
                             .padding(innerPadding)
                     ) {
                         items(albumList) { album ->
-                            AlbumItem(album = album, navController = navController)
+                            AlbumItem(album = album, navigateToAlbumDetails = navigateToAlbumDetails)
                         }
                     }
             }
@@ -146,7 +143,7 @@ fun AlbumsGrid(
 }
 
 @Composable
-fun AlbumItem(album: DatabaseAlbum, navController: NavController) {
+fun AlbumItem(album: DatabaseAlbum, navigateToAlbumDetails: (String) -> Unit) {
     val roundedCornerShape = RoundedCornerShape(16.dp)
     Surface(
         shape = roundedCornerShape,
@@ -154,7 +151,7 @@ fun AlbumItem(album: DatabaseAlbum, navController: NavController) {
         modifier = Modifier
             .padding(8.dp)
             .clip(roundedCornerShape)
-            .clickable { navController.navigate("${Detail.route}/${album.id}") }
+            .clickable { navigateToAlbumDetails(album.id) }
     ) {
         Box(
             modifier = Modifier

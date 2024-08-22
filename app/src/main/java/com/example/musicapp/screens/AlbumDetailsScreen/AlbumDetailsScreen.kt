@@ -40,7 +40,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.musicapp.R
@@ -49,7 +48,7 @@ import com.example.musicapp.ui.theme.Theme
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun AlbumDetailsScreen(albumId: String?, navController: NavController) {
+fun AlbumDetailsScreen(albumId: String?, navigateUp: () -> Unit) {
     val viewModel: AlbumDetailsViewModel = hiltViewModel()
     val context = LocalContext.current
 
@@ -66,7 +65,7 @@ fun AlbumDetailsScreen(albumId: String?, navController: NavController) {
                 TopAppBar(
                     title = { Text(text = "Album Details") },
                     navigationIcon = {
-                        IconButton(onClick = { navController.navigateUp() }) {
+                        IconButton(onClick = { navigateUp() }) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = "Back",

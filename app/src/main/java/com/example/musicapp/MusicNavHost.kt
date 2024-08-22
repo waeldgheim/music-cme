@@ -19,7 +19,7 @@ fun MusicNavHost(
         startDestination = Home.route
     ) {
         composable(Home.route) {
-            AlbumScreen(navController)
+            AlbumScreen(navigateToAlbumDetails = {albumId -> navController.navigate("${Detail.route}/${albumId}")})
         }
         composable(Search.route) {
             SearchScreen()
@@ -29,7 +29,7 @@ fun MusicNavHost(
         }
         composable("${Detail.route}/{albumId}") { backStackEntry ->
             val albumId = backStackEntry.arguments?.getString("albumId")
-            AlbumDetailsScreen(albumId, navController)
+            AlbumDetailsScreen(albumId, navigateUp = { navController.navigateUp() })
         }
     }
 }
