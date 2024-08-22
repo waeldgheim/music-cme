@@ -58,7 +58,6 @@ import kotlinx.coroutines.flow.StateFlow
 fun AlbumScreen(navigateToAlbumDetails: (String) -> Unit) {
     val viewModel: AlbumsViewModel = hiltViewModel()
     val albumList by viewModel.albums.collectAsState(initial = emptyList())
-
     val color by viewModel.color.collectAsState()
 
     MusicAppTheme(color = color) {
@@ -139,7 +138,7 @@ fun AlbumsGrid(
         }
     )
 
-    ColorPickerDialog(showDialog, { showDialog = false }, viewModel)
+    ColorPickerDialog(showDialog, { showDialog = false }, { color -> viewModel.updateColor(color) })
 }
 
 @Composable
