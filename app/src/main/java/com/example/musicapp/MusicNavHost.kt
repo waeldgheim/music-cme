@@ -5,8 +5,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.musicapp.screens.screena.ScreenAContent
-import com.example.musicapp.screens.screenb.ScreenBContent
+import com.example.musicapp.screens.AlbumDetailsScreen.AlbumDetailsScreen
+import com.example.musicapp.screens.AlbumsScreen.AlbumScreen
+import com.example.musicapp.screens.FilterScreen.FilterScreen
+import com.example.musicapp.screens.SettingsScreen.SettingsScreen
 
 @Composable
 fun MusicNavHost(
@@ -16,14 +18,20 @@ fun MusicNavHost(
     NavHost(
         navController = navController,
         modifier = modifier,
-        startDestination = ButtonList.route
+        startDestination = Home.route
     ) {
-        composable(ButtonList.route) {
-            ScreenAContent(navController)
+        composable(Home.route) {
+            AlbumScreen(navigateToAlbumDetails = {albumId -> navController.navigate("${Detail.route}/${albumId}")})
+        }
+        composable(Filter.route) {
+            FilterScreen(navigateToAlbumDetails = {albumId -> navController.navigate("${Detail.route}/${albumId}")})
+        }
+        composable(Settings.route) {
+            SettingsScreen()
         }
         composable("${Detail.route}/{albumId}") { backStackEntry ->
             val albumId = backStackEntry.arguments?.getString("albumId")
-            ScreenBContent(albumId, navController)
+            AlbumDetailsScreen(albumId, navigateUp = { navController.navigateUp() })
         }
     }
 }

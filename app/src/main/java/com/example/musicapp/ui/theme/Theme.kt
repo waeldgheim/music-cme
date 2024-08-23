@@ -42,18 +42,22 @@ fun MusicAppTheme(
     val LightColorPalette = lightColorScheme(
         primary = color,
         secondary = lightenColor(color, 0.3f),
+        tertiary = Color.White,
         background = lightenColor(color, 0.8f),
         onPrimary = if (isLuminant(color)) Color(0xFF000000) else  Color(0xFFFFFFFF),
         onSecondary = Color(0xFF808080),
+        onTertiary = Color.Black,
         onBackground = Color(0xFF000000)
     )
 
     val DarkColorPalette = darkColorScheme(
         primary = color,
         secondary = darkenColor(color, 0.5f),
+        tertiary = Color.Black,
         background = darkenColor(color, 0.8f),
         onPrimary = if (isLuminant(color)) Color(0xFF000000) else  Color(0xFFFFFFFF),
         onSecondary = Color(0xFFA5A5A5),
+        onTertiary = Color.White,
         onBackground = Color(0xFFFFFFFF)
     )
 

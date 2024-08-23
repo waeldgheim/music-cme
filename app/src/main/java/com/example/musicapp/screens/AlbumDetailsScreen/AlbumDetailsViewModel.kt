@@ -1,8 +1,9 @@
-package com.example.musicapp.screens.screena
+package com.example.musicapp.screens.AlbumDetailsScreen
 
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.musicapp.database.DatabaseAlbum
 import com.example.musicapp.repository.MusicRepository
 import com.example.musicapp.ui.theme.Theme
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ScreenAViewModel @Inject constructor (
+class AlbumDetailsViewModel @Inject constructor(
     private val musicRepository: MusicRepository
 ): ViewModel() {
     private val _color = MutableStateFlow(Theme.getTColor())
@@ -22,19 +23,17 @@ class ScreenAViewModel @Inject constructor (
         _color.value = Color(newColor)
     }
 
-    val status = musicRepository.status
-    val albums = musicRepository.albums
+    private val _albumDetails = MutableStateFlow<DatabaseAlbum?>(null)
+    val albumDetails: StateFlow<DatabaseAlbum?> = _albumDetails
 
-    init {
+    fun getAlbumDetails(id: String){
         viewModelScope.launch {
-            musicRepository.refreshAlbums()
+            try {
+                musicRepository.getAlbumById(id)
+                _albumDetails.value = musicRepository.albumDetails
+            } catch (e:Exception){
+                _albumDetails.value = null
+            }
         }
     }
-
-    fun refresh(){
-        viewModelScope.launch {
-            musicRepository.refreshAlbums()
-        }
-    }
-
 }

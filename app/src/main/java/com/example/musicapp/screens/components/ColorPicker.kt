@@ -31,7 +31,7 @@ import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.musicapp.R
-import com.example.musicapp.screens.screena.ScreenAViewModel
+import com.example.musicapp.ui.theme.MusicAppTheme
 import com.example.musicapp.ui.theme.Theme
 import com.github.skydoves.colorpicker.compose.AlphaTile
 import com.github.skydoves.colorpicker.compose.BrightnessSlider
@@ -45,53 +45,55 @@ import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 fun ColorPickerDialog(
     isDialogOpen: Boolean,
     onDismiss: () -> Unit,
-    viewModel: ScreenAViewModel
+    updateColor: (Long) -> Unit
 ) {
     var pickedColor by remember { mutableStateOf(Color.Transparent) }
 
-    if (isDialogOpen) {
-        AlertDialog(
-            onDismissRequest = onDismiss,
-            title = {
-                Text(
-                    text = "Pick a Color",
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            },
-            text = {
-                ColorPicker(
-                    onColorChanged = { color ->
-                        pickedColor = color
+    MusicAppTheme(color = Theme.getTColor()) {
+        if (isDialogOpen) {
+            AlertDialog(
+                onDismissRequest = onDismiss,
+                title = {
+                    Text(
+                        text = "Pick a Color",
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                },
+                text = {
+                    ColorPicker(
+                        onColorChanged = { color ->
+                            pickedColor = color
+                        }
+                    )
+                },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            val colorLong = pickedColor.toArgb().toLong()
+                            Theme.saveColor(pickedColor.toArgb().toLong())
+                            updateColor(colorLong)
+                            onDismiss()
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary
+                        )
+                    ) {
+                        Text(text = "OK", color = MaterialTheme.colorScheme.onPrimary)
                     }
-                )
-            },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        val colorLong = pickedColor.toArgb().toLong()
-                        Theme.saveColor(pickedColor.toArgb().toLong())
-                        viewModel.updateColor(colorLong)
-                        onDismiss()
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary
-                    )
-                ) {
-                    Text(text = "OK", color = MaterialTheme.colorScheme.onPrimary)
+                },
+                dismissButton = {
+                    Button(
+                        onClick = onDismiss,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.secondary
+                        )
+                    ) {
+                        Text(text = "Cancel", color = MaterialTheme.colorScheme.onPrimary)
+                    }
                 }
-            },
-            dismissButton = {
-                Button(
-                    onClick = onDismiss,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondary
-                    )
-                ) {
-                    Text(text = "Cancel", color = MaterialTheme.colorScheme.onPrimary)
-                }
-            }
-        )
+            )
+        }
     }
 }
 

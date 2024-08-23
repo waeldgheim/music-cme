@@ -1,4 +1,4 @@
-package com.example.musicapp.screens.screenb
+package com.example.musicapp.screens.AlbumDetailsScreen
 
 import android.content.Intent
 import android.net.Uri
@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -30,6 +31,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,18 +44,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.musicapp.R
+import com.example.musicapp.screens.components.ColorPickerDialog
 import com.example.musicapp.ui.theme.MusicAppTheme
 import com.example.musicapp.ui.theme.Theme
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenBContent(albumId: String?, navController: NavController) {
-    val viewModel: ScreenBViewModel = hiltViewModel()
+fun AlbumDetailsScreen(albumId: String?, navigateUp: () -> Unit) {
+    val viewModel: AlbumDetailsViewModel = hiltViewModel()
     val context = LocalContext.current
+    val color by viewModel.color.collectAsState()
+    var showDialog by remember { mutableStateOf(false) }
 
     albumId?.let {
         viewModel.getAlbumDetails(it)
@@ -60,13 +66,22 @@ fun ScreenBContent(albumId: String?, navController: NavController) {
     val albumDetails by viewModel.albumDetails.collectAsState()
     val genresList = albumDetails?.genre?.split(", ")
 
-    MusicAppTheme(color = Theme.getTColor()) {
+    MusicAppTheme(color = color) {
         Scaffold(
             topBar = {
                 TopAppBar(
                     title = { Text(text = "Album Details") },
+                    actions = {
+                        IconButton(onClick = { showDialog = true }) {
+                            Icon(
+                                imageVector = Icons.Filled.Palette,
+                                contentDescription = "Choose Color",
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )
+                        }
+                    },
                     navigationIcon = {
-                        IconButton(onClick = { navController.navigateUp() }) {
+                        IconButton(onClick = { navigateUp() }) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = "Back",
@@ -188,4 +203,5 @@ fun ScreenBContent(albumId: String?, navController: NavController) {
             }
         }
     }
+    ColorPickerDialog(showDialog, { showDialog = false }, { c -> viewModel.updateColor(c) })
 }

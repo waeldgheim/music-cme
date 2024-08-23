@@ -1,4 +1,4 @@
-package com.example.musicapp.screens.screena
+package com.example.musicapp.screens.AlbumsScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -44,66 +43,39 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.musicapp.Detail
 import com.example.musicapp.R
 import com.example.musicapp.database.DatabaseAlbum
 import com.example.musicapp.repository.ApiStatus
 import com.example.musicapp.screens.components.ColorPickerDialog
-import com.example.musicapp.ui.theme.LoadingAnimation
+import com.example.musicapp.screens.components.ErrorScreen
+import com.example.musicapp.screens.components.LoadingAnimation
 import com.example.musicapp.ui.theme.MusicAppTheme
+import kotlinx.coroutines.flow.StateFlow
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenAContent(navController: NavController) {
-    val viewModel: ScreenAViewModel = hiltViewModel()
+fun AlbumScreen(navigateToAlbumDetails: (String) -> Unit) {
+    val viewModel: AlbumsViewModel = hiltViewModel()
     val albumList by viewModel.albums.collectAsState(initial = emptyList())
-    val status by viewModel.status.collectAsState()
-
     val color by viewModel.color.collectAsState()
 
     MusicAppTheme(color = color) {
-        when (status) {
-            ApiStatus.LOADING -> {
-                LoadingAnimation()
-            }
-
-            ApiStatus.ERROR -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Refresh,
-                        contentDescription = "Error icon",
-                        modifier = Modifier
-                            .size(200.dp)
-                            .padding(16.dp)
-                            .clickable { viewModel.refresh() },
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                }
-            }
-
-            ApiStatus.DONE -> {
-                ScreenA(viewModel, albumList, navController)
-            }
-        }
+        AlbumsGrid(viewModel, albumList, navigateToAlbumDetails, viewModel.status)
     }
 }
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenA(
-    viewModel: ScreenAViewModel,
+fun AlbumsGrid(
+    viewModel: AlbumsViewModel,
     albumList: List<DatabaseAlbum>,
-    navController: NavController,
+    navigateToAlbumDetails: (String) -> Unit,
+    statusApi: StateFlow<ApiStatus>
 ) {
     var showDialog by remember { mutableStateOf(false) }
+    val status by statusApi.collectAsState()
 
     Scaffold(
         topBar = {
@@ -138,30 +110,39 @@ fun ScreenA(
             )
         },
         content = { innerPadding ->
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                contentPadding = PaddingValues(
-                    start = 15.dp,
-                    end = 15.dp,
-                    top = 25.dp,
-                    bottom = 8.dp
-                ),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-            ) {
-                items(albumList) { album ->
-                    AlbumItem(album = album, navController = navController)
-                }
+            when (status) {
+                ApiStatus.LOADING ->
+                    LoadingAnimation()
+
+                ApiStatus.ERROR ->
+                    ErrorScreen(onRetry = { viewModel.refresh() })
+
+                else ->
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        contentPadding = PaddingValues(
+                            start = 15.dp,
+                            end = 15.dp,
+                            top = 25.dp,
+                            bottom = 8.dp
+                        ),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                    ) {
+                        items(albumList) { album ->
+                            AlbumItem(album = album, navigateToAlbumDetails = navigateToAlbumDetails)
+                        }
+                    }
             }
         }
     )
 
-    ColorPickerDialog(showDialog, { showDialog = false }, viewModel)
+    ColorPickerDialog(showDialog, { showDialog = false }, { color -> viewModel.updateColor(color) })
 }
 
 @Composable
-fun AlbumItem(album: DatabaseAlbum, navController: NavController) {
+fun AlbumItem(album: DatabaseAlbum, navigateToAlbumDetails: (String) -> Unit) {
     val roundedCornerShape = RoundedCornerShape(16.dp)
     Surface(
         shape = roundedCornerShape,
@@ -169,7 +150,7 @@ fun AlbumItem(album: DatabaseAlbum, navController: NavController) {
         modifier = Modifier
             .padding(8.dp)
             .clip(roundedCornerShape)
-            .clickable { navController.navigate("${Detail.route}/${album.id}") }
+            .clickable { navigateToAlbumDetails(album.id) }
     ) {
         Box(
             modifier = Modifier
