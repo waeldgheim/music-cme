@@ -52,6 +52,8 @@ import com.example.musicapp.screens.components.ColorPickerDialog
 import com.example.musicapp.screens.components.ErrorScreen
 import com.example.musicapp.screens.components.LoadingAnimation
 import com.example.musicapp.ui.theme.MusicAppTheme
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
@@ -76,6 +78,8 @@ fun AlbumsGrid(
 ) {
     var showDialog by remember { mutableStateOf(false) }
     val status by statusApi.collectAsState()
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing)
 
     Scaffold(
         topBar = {
@@ -94,13 +98,6 @@ fun AlbumsGrid(
                             tint = MaterialTheme.colorScheme.onPrimary
                         )
                     }
-                    IconButton(onClick = { viewModel.refresh() }) {
-                        Icon(
-                            imageVector = Icons.Filled.Refresh,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onPrimary
-                        )
-                    }
                 },
                 colors = TopAppBarDefaults.largeTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
@@ -110,30 +107,37 @@ fun AlbumsGrid(
             )
         },
         content = { innerPadding ->
-            when (status) {
-                ApiStatus.LOADING ->
-                    LoadingAnimation()
+            SwipeRefresh(
+                state = swipeRefreshState,
+                onRefresh = {
+                    viewModel.refresh()
+                }
+            ) {
+                when (status) {
+                    ApiStatus.LOADING ->
+                        LoadingAnimation()
 
-                ApiStatus.ERROR ->
-                    ErrorScreen(onRetry = { viewModel.refresh() })
+                    ApiStatus.ERROR ->
+                        ErrorScreen(onRetry = { viewModel.refresh() })
 
-                else ->
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(2),
-                        contentPadding = PaddingValues(
-                            start = 15.dp,
-                            end = 15.dp,
-                            top = 25.dp,
-                            bottom = 8.dp
-                        ),
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding)
-                    ) {
-                        items(albumList) { album ->
-                            AlbumItem(album = album, navigateToAlbumDetails = navigateToAlbumDetails)
+                    else ->
+                        LazyVerticalGrid(
+                            columns = GridCells.Fixed(2),
+                            contentPadding = PaddingValues(
+                                start = 15.dp,
+                                end = 15.dp,
+                                top = 25.dp,
+                                bottom = 8.dp
+                            ),
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(innerPadding)
+                        ) {
+                            items(albumList) { album ->
+                                AlbumItem(album = album, navigateToAlbumDetails = navigateToAlbumDetails)
+                            }
                         }
-                    }
+                }
             }
         }
     )

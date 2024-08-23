@@ -22,6 +22,10 @@ class AlbumsViewModel @Inject constructor (
         _color.value = Color(newColor)
     }
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean>
+        get() = _isRefreshing
+
     val status = musicRepository.status
     val albums = musicRepository.albums
 
@@ -35,6 +39,7 @@ class AlbumsViewModel @Inject constructor (
         viewModelScope.launch {
             musicRepository.refreshAlbums()
         }
+        _isRefreshing.value = false
     }
 
 }

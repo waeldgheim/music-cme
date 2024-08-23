@@ -19,7 +19,7 @@ class MusicRepository @Inject constructor(
     private val database: MusicDatabase,
     private val musicAppService: MusicAppService) {
 
-    private val _status = MutableStateFlow<ApiStatus>(ApiStatus.LOADING)
+    private val _status = MutableStateFlow<ApiStatus>(ApiStatus.DONE)
     val status: StateFlow<ApiStatus>
         get() = _status
 
