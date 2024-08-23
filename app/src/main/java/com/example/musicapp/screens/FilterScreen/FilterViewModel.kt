@@ -7,6 +7,7 @@ import com.example.musicapp.database.DatabaseAlbum
 import com.example.musicapp.repository.MusicRepository
 import com.example.musicapp.ui.theme.Theme
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -27,6 +28,8 @@ class FilterViewModel @Inject constructor(
     fun updateColor(newColor: Long) {
         _color.value = Color(newColor)
     }
+
+    val status = musicRepository.status
 
     val albums = musicRepository.albums
 

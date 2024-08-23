@@ -48,7 +48,10 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.musicapp.R
 import com.example.musicapp.database.DatabaseAlbum
+import com.example.musicapp.repository.ApiStatus
 import com.example.musicapp.screens.components.ColorPickerDialog
+import com.example.musicapp.screens.components.ErrorScreen
+import com.example.musicapp.screens.components.LoadingAnimation
 import com.example.musicapp.ui.theme.MusicAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,9 +62,9 @@ fun FilterScreen(navigateToAlbumDetails: (String) -> Unit) {
     val allGenres by viewModel.allGenres.collectAsState()
     val selectedGenre by viewModel.selectedGenre.collectAsState()
     val filteredAlbums by viewModel.filteredAlbums.collectAsState()
+    val status by viewModel.status.collectAsState()
 
     var showDialog by remember { mutableStateOf(false) }
-
 
     MusicAppTheme(color = color) {
         Scaffold(
@@ -97,51 +100,56 @@ fun FilterScreen(navigateToAlbumDetails: (String) -> Unit) {
                 )
             },
             content = { innerPadding ->
-                Column(
-                    modifier = Modifier
-                        .padding(innerPadding)
-                        .padding(top = 15.dp)
-                )
-                {
-                    LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(5.dp),
-                        contentPadding = PaddingValues(horizontal = 12.dp)
-                    )
-                    {
-                        item {
-                            FilterButton(
-                                "All",
-                                selectedGenre,
-                                onGenreSelected = { g -> viewModel.selectGenre(g) })
-                        }
-                        items(allGenres) { genre ->
-                            FilterButton(genre, selectedGenre,
-                                onGenreSelected = { g -> viewModel.selectGenre(g) })
-                        }
-                    }
-
-                    LazyColumn(
-                        contentPadding = PaddingValues(
-                            start = 20.dp,
-                            end = 20.dp,
-                            top = 10.dp,
-                            bottom = 8.dp
-                        ),
-                        modifier = Modifier
-                            .fillMaxSize()
-                    ) {
-                        items(filteredAlbums) { album ->
-                            AlbumItem(
-                                album = album,
-                                navigateToAlbumDetails = navigateToAlbumDetails
+                when (status) {
+                    ApiStatus.LOADING -> LoadingAnimation()
+                    ApiStatus.ERROR -> ErrorScreen(onRetry = { viewModel.refresh() })
+                    else ->
+                        Column(
+                            modifier = Modifier
+                                .padding(innerPadding)
+                                .padding(top = 15.dp)
+                        )
+                        {
+                            LazyRow(
+                                horizontalArrangement = Arrangement.spacedBy(5.dp),
+                                contentPadding = PaddingValues(horizontal = 12.dp)
                             )
+                            {
+                                item {
+                                    FilterButton(
+                                        "All",
+                                        selectedGenre,
+                                        onGenreSelected = { g -> viewModel.selectGenre(g) })
+                                }
+                                items(allGenres) { genre ->
+                                    FilterButton(genre, selectedGenre,
+                                        onGenreSelected = { g -> viewModel.selectGenre(g) })
+                                }
+                            }
+
+                            LazyColumn(
+                                contentPadding = PaddingValues(
+                                    start = 20.dp,
+                                    end = 20.dp,
+                                    top = 10.dp,
+                                    bottom = 8.dp
+                                ),
+                                modifier = Modifier
+                                    .fillMaxSize()
+                            ) {
+                                items(filteredAlbums) { album ->
+                                    AlbumItem(
+                                        album = album,
+                                        navigateToAlbumDetails = navigateToAlbumDetails
+                                    )
+                                }
+                            }
                         }
-                    }
                 }
             }
         )
     }
-    ColorPickerDialog(showDialog, { showDialog = false }, { c -> viewModel.updateColor(c)})
+    ColorPickerDialog(showDialog, { showDialog = false }, { c -> viewModel.updateColor(c) })
 }
 
 @Composable
