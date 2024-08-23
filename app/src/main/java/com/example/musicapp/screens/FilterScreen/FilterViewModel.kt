@@ -7,7 +7,6 @@ import com.example.musicapp.database.DatabaseAlbum
 import com.example.musicapp.repository.MusicRepository
 import com.example.musicapp.ui.theme.Theme
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -29,6 +28,10 @@ class FilterViewModel @Inject constructor(
         _color.value = Color(newColor)
     }
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean>
+        get() = _isRefreshing
+
     val status = musicRepository.status
 
     val albums = musicRepository.albums
@@ -42,18 +45,20 @@ class FilterViewModel @Inject constructor(
             .sorted()
     }.stateIn(viewModelScope, started = SharingStarted.Eagerly, initialValue = emptyList())
 
-    val filteredAlbums: StateFlow<List<DatabaseAlbum>> = combine(albums, selectedGenre) { albumsList, selectedGenre ->
-        if (selectedGenre == "All") albumsList
-        else albumsList.filter { selectedGenre in it.genre.split(", ") }
-    }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+    val filteredAlbums: StateFlow<List<DatabaseAlbum>> =
+        combine(albums, selectedGenre) { albumsList, selectedGenre ->
+            if (selectedGenre == "All") albumsList
+            else albumsList.filter { selectedGenre in it.genre.split(", ") }
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     fun selectGenre(genre: String) {
         _selectedGenre.value = genre
     }
 
-    fun refresh(){
+    fun refresh() {
         viewModelScope.launch {
             musicRepository.refreshAlbums()
         }
+        _isRefreshing.value = false
     }
 }

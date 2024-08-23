@@ -53,6 +53,8 @@ import com.example.musicapp.screens.components.ColorPickerDialog
 import com.example.musicapp.screens.components.ErrorScreen
 import com.example.musicapp.screens.components.LoadingAnimation
 import com.example.musicapp.ui.theme.MusicAppTheme
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,6 +67,9 @@ fun FilterScreen(navigateToAlbumDetails: (String) -> Unit) {
     val status by viewModel.status.collectAsState()
 
     var showDialog by remember { mutableStateOf(false) }
+
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing)
 
     MusicAppTheme(color = color) {
         Scaffold(
@@ -84,13 +89,6 @@ fun FilterScreen(navigateToAlbumDetails: (String) -> Unit) {
                                 tint = MaterialTheme.colorScheme.onPrimary
                             )
                         }
-                        IconButton(onClick = { viewModel.refresh() }) {
-                            Icon(
-                                imageVector = Icons.Filled.Refresh,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onPrimary
-                            )
-                        }
                     },
                     colors = TopAppBarDefaults.largeTopAppBarColors(
                         containerColor = MaterialTheme.colorScheme.primary,
@@ -100,51 +98,58 @@ fun FilterScreen(navigateToAlbumDetails: (String) -> Unit) {
                 )
             },
             content = { innerPadding ->
-                when (status) {
-                    ApiStatus.LOADING -> LoadingAnimation()
-                    ApiStatus.ERROR -> ErrorScreen(onRetry = { viewModel.refresh() })
-                    else ->
-                        Column(
-                            modifier = Modifier
-                                .padding(innerPadding)
-                                .padding(top = 15.dp)
-                        )
-                        {
-                            LazyRow(
-                                horizontalArrangement = Arrangement.spacedBy(5.dp),
-                                contentPadding = PaddingValues(horizontal = 12.dp)
+                SwipeRefresh(
+                    state = swipeRefreshState,
+                    onRefresh = {
+                        viewModel.refresh()
+                    }
+                ) {
+                    when (status) {
+                        ApiStatus.LOADING -> LoadingAnimation()
+                        ApiStatus.ERROR -> ErrorScreen(onRetry = { viewModel.refresh() })
+                        else ->
+                            Column(
+                                modifier = Modifier
+                                    .padding(innerPadding)
+                                    .padding(top = 15.dp)
                             )
                             {
-                                item {
-                                    FilterButton(
-                                        "All",
-                                        selectedGenre,
-                                        onGenreSelected = { g -> viewModel.selectGenre(g) })
+                                LazyRow(
+                                    horizontalArrangement = Arrangement.spacedBy(5.dp),
+                                    contentPadding = PaddingValues(horizontal = 12.dp)
+                                )
+                                {
+                                    item {
+                                        FilterButton(
+                                            "All",
+                                            selectedGenre,
+                                            onGenreSelected = { g -> viewModel.selectGenre(g) })
+                                    }
+                                    items(allGenres) { genre ->
+                                        FilterButton(genre, selectedGenre,
+                                            onGenreSelected = { g -> viewModel.selectGenre(g) })
+                                    }
                                 }
-                                items(allGenres) { genre ->
-                                    FilterButton(genre, selectedGenre,
-                                        onGenreSelected = { g -> viewModel.selectGenre(g) })
-                                }
-                            }
 
-                            LazyColumn(
-                                contentPadding = PaddingValues(
-                                    start = 20.dp,
-                                    end = 20.dp,
-                                    top = 10.dp,
-                                    bottom = 8.dp
-                                ),
-                                modifier = Modifier
-                                    .fillMaxSize()
-                            ) {
-                                items(filteredAlbums) { album ->
-                                    AlbumItem(
-                                        album = album,
-                                        navigateToAlbumDetails = navigateToAlbumDetails
-                                    )
+                                LazyColumn(
+                                    contentPadding = PaddingValues(
+                                        start = 20.dp,
+                                        end = 20.dp,
+                                        top = 10.dp,
+                                        bottom = 8.dp
+                                    ),
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                ) {
+                                    items(filteredAlbums) { album ->
+                                        AlbumItem(
+                                            album = album,
+                                            navigateToAlbumDetails = navigateToAlbumDetails
+                                        )
+                                    }
                                 }
                             }
-                        }
+                    }
                 }
             }
         )
